@@ -2,6 +2,7 @@
 #include "sampVersions.h"
 #include "Hooks.h"
 
+
 // globals
 DWORD dwSampDLL = NULL;
 CAddresses Addr;
@@ -34,8 +35,10 @@ DWORD WINAPI waitForSamp()
 
 			gInited = true;
 			DebugPrint("Setting up SAMP Hooks\n");
-			SetupSampHooks();
+			if (!SetupSampHooks())
+				gInited = false;
 			DebugPrint("SAMP Initialized, host: %s\n", (char*)((*(DWORD*)info) + Addr.OFFSET_SampInfo_Hostname));
+			//break; // TODO: Move this to some non-threaded equivalent, preferably some GTA hook
 		}
 		
 		Sleep(100);

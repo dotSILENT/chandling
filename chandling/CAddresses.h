@@ -23,11 +23,10 @@ public:
 			OFFSET_SampInfo = 0x21A100;
 			OFFSET_SampInfo_pPools = 0x3C5;
 			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
+			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
 			OFFSET_SampInfo_Hostname = 0x11D;
 			FUNC_IDFromGtaPtr = 0x1b180;
-			FUNC_GtaPtrFromID = 0x1b1b0;
 			FUNC_CVehiclePool_CreateVehicle = 0x1B670;
-			FUNC_GetVehicleStruct = 0xAD350;
 		}
 		}
 	}
@@ -35,10 +34,9 @@ public:
 	DWORD	OFFSET_SampInfo = 0;
 	DWORD	OFFSET_SampInfo_pPools = 0;
 	DWORD	OFFSET_SampInfo_pPools_pVehiclePool = 0;
+	DWORD	OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0;
 	DWORD	OFFSET_SampInfo_Hostname = 0;
 
 	DWORD	FUNC_IDFromGtaPtr = 0;
-	DWORD	FUNC_GtaPtrFromID = 0;
 	DWORD	FUNC_CVehiclePool_CreateVehicle = 0;
-	DWORD	FUNC_GetVehicleStruct = 0;
 };

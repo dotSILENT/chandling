@@ -1,12 +1,11 @@
 #pragma once
 #include "game\game.h"
+#include "main.h"
 #include "HandlingEnum.h"
-#include "HandlingModifiersManager.h"
 
 #include <vector>
 
 #define MAX_HANDLINGS 212
-#define MAX_VEHICLES 2000
 
 
 void FUNC_CalcHandling(struct tHandlingData* handling)
@@ -23,10 +22,7 @@ public:
 	bool stored = false; // set to true when storing any handling for the first time
 
 	struct tHandlingData rawHandling;
-	CHandlingModifiersMgr cModifiers;
 	struct tHandlingData calcHandling;
-
-	int GetHandlingIndex() { return rawHandling.m_iIndex; };
 
 	void RestoreUncalculated() // this restores the uncalculated handling & allows us to calculate it again
 	{
@@ -39,7 +35,6 @@ public:
 		if (calculated)
 			return;
 
-		cModifiers.ApplyModifiersToRawHandling(&calcHandling); // at this point calcHandling is the raw handling, we don't modify rawHandling directly in order to keep the original data
 		FUNC_CalcHandling(&calcHandling);
 		calculated = true;
 	}
@@ -48,7 +43,6 @@ public:
 	{
 		stored = false;
 		calculated = false;
-		cModifiers.ClearModifiers();
 	}
 };
 

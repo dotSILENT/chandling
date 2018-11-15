@@ -78,6 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.asi</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -126,7 +127,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>$(OutDir)$(TargetName).asi</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,14 +152,12 @@
   <ItemGroup>
     <ClCompile Include="CAddresses.h" />
     <ClCompile Include="HandlingManager.cpp" />
-    <ClCompile Include="HandlingModifiersManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HandlingEnum.h" />
     <ClInclude Include="HandlingManager.h" />
-    <ClInclude Include="HandlingModifiersManager.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="detours.h" />
     <ClInclude Include="game\CEntity.h" />
