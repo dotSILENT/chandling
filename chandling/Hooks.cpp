@@ -17,11 +17,12 @@ tSampGetVehicleStruct SampGetVehicleStruct = nullptr; // Get pointer to GTA vehi
 // Queue used for getting samp ID from pointer, as we can't do it straight away
 std::queue<CVehicle*> qCreatedVehiclePtrs;
 
-// Some pointers for easier operations
-DWORD* pSampInfo = nullptr;
-DWORD* pSampPools = nullptr;
-DWORD* pSampVehPool = nullptr;
-CVehicle** IdToPtrTranslation = nullptr;
+// They aren't actual pointers but the addresses that real pointers point to are kept as values
+DWORD dwSampInfo = NULL;
+DWORD dwSampPools = NULL;
+DWORD dwSampVehPool = NULL;
+
+CVehicle** IdToPtrTranslation = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct pointer to CVehicle class
 
 // This GTA func is used to create vehicles (excluding trains) for scripts, SAMP uses it to create vehicles
 // It's called everytime a vehicle streams in, giving us it's direct CVehicle pointer
@@ -47,36 +48,41 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmt
 	{
 		CVehicle* ptr = qCreatedVehiclePtrs.front();
 
-		int id = SampIDFromGtaPtr(pSampVehPool, (int)ptr);
+		int id = SampIDFromGtaPtr((DWORD*)dwSampVehPool, (int)ptr);
 		DebugPrint("SAMP ID FROM 0x%x -> %d\n", (int)ptr, id);
 
-		DebugPrint("vehpool 0x%x pools 0x%x ptrFromId 0x%x\n", (int)pSampVehPool, (int)pSampPools, (int)IdToPtrTranslation[id]);
+		DebugPrint("vehpool 0x%x pools 0x%x ptrFromId 0x%x\n", (int)dwSampVehPool, (int)dwSampPools, (int)IdToPtrTranslation[id]);
 
 		qCreatedVehiclePtrs.pop();
 	}
 	return ret;
 }
 
+
 void SetupGtaHooks()
 {
 	originalCCarCtrlCreateCar = (tCreateCar)DetourFunction((PBYTE)FUNC_CCarCtrl_CreateCarForScript, (PBYTE)hookedCCarCtrlCreateCar);
+
 }
 
 bool SetupSampHooks()
 {
 	if (gInited)
 	{
-		pSampInfo = (DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
-		if (!pSampInfo)
+		dwSampInfo = *(DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
+		if ((PDWORD)dwSampInfo == nullptr)
 			return false;
-		pSampPools = *(DWORD**)(*pSampInfo + Addr.OFFSET_SampInfo_pPools);
-		if (!pSampPools)
+		DebugPrint("dwSampInfo 0x%x @ 0x%x\n", dwSampInfo, (dwSampDLL + Addr.OFFSET_SampInfo));
+		dwSampPools = *(DWORD*)(dwSampInfo + Addr.OFFSET_SampInfo_pPools);
+		if ((PDWORD)dwSampPools == nullptr)
 			return false;
-		pSampVehPool = *(DWORD**)((PBYTE)pSampPools + Addr.OFFSET_SampInfo_pPools_pVehiclePool);
-		if (!pSampVehPool)
+		DebugPrint("dwSampPools 0x%x\n", dwSampPools);
+		dwSampVehPool = *(DWORD*)(dwSampPools + Addr.OFFSET_SampInfo_pPools_pVehiclePool);
+		if ((PDWORD)dwSampVehPool == nullptr)
 			return false;
+		DebugPrint("dwSampVehPool 0x%x\n", dwSampVehPool);
 
-		IdToPtrTranslation = reinterpret_cast<CVehicle**>(((PBYTE)pSampVehPool + Addr.OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles));
+		IdToPtrTranslation = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles));
 		SampIDFromGtaPtr = (tSampIDFromGtaPtr)(dwSampDLL + Addr.FUNC_IDFromGtaPtr);
 		originalSampCreateVehicle = (tSampCreateVehicle)DetourFunction((PBYTE)(dwSampDLL + Addr.FUNC_CVehiclePool_CreateVehicle), (PBYTE)hookedSampCreateVehicle);
 		return true;
