@@ -5,6 +5,7 @@
 
 // globals
 DWORD dwSampDLL = NULL;
+eSampVersion sampVer = SAMP_000;
 CAddresses Addr;
 bool gInited = false;
 
@@ -26,8 +27,18 @@ DWORD WINAPI waitForSamp()
 		}
 		else if (!gInited)
 		{
-			// TODO: Version detection
-			Addr.Init(SAMP_037_R2);
+			if (sampVer == SAMP_000)
+			{
+				if ((sampVer = DetectSampVersion(dwSampDLL)) != SAMP_000)
+					Addr.Init(sampVer);
+				else
+				{
+					DebugPrint("Unsupported SA:MP version, aborting...");
+
+					ExitThread(EXIT_SUCCESS);
+					return 1;
+				}
+			}
 
 			DWORD * info = (DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
 			if (*(DWORD**)info == nullptr)

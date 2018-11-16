@@ -4,8 +4,6 @@
 
 // GTA SA func
 #define FUNC_CCarCtrl_CreateCarForScript 0x431f80
-#define ADDR_VEHICLE_TABLE	0xB7449
-#define ADDR_VEHICLE_FROM_ID	0x4048E0
 
 /*
 	I don't use statics for this because it's a pain in the ass (they need to be initialized to be resolved)

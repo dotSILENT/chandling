@@ -154,6 +154,7 @@
     <ClCompile Include="HandlingManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="sampVersions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HandlingEnum.h" />
