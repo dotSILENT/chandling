@@ -154,6 +154,7 @@
     <ClCompile Include="HandlingManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="raknet\BitStream.cpp" />
     <ClCompile Include="sampVersions.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +166,10 @@
     <ClInclude Include="game\CSomeClassess.h" />
     <ClInclude Include="game\CVector.h" />
     <ClInclude Include="game\game.h" />
+    <ClInclude Include="hook_utils.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="raknet\BitStream.h" />
+    <ClInclude Include="raknet\RakClientInterface.h" />
     <ClInclude Include="sampVersions.h" />
   </ItemGroup>
   <ItemGroup>

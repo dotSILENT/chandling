@@ -16,6 +16,9 @@
     <Filter Include="Header Files\game">
       <UniqueIdentifier>{e8e9b25c-d186-4e32-98f3-79ad29b6a325}</UniqueIdentifier>
     </Filter>
+    <Filter Include="raknet">
+      <UniqueIdentifier>{d7c1fb73-6c2e-4a02-bf53-5256b7516a02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -32,6 +35,9 @@
     </ClCompile>
     <ClCompile Include="sampVersions.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="raknet\BitStream.cpp">
+      <Filter>raknet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +69,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HandlingManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="raknet\BitStream.h">
+      <Filter>raknet</Filter>
+    </ClInclude>
+    <ClInclude Include="raknet\RakClientInterface.h">
+      <Filter>raknet</Filter>
+    </ClInclude>
+    <ClInclude Include="hook_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,7 +9,6 @@ eSampVersion sampVer = SAMP_000;
 CAddresses Addr;
 bool gInited = false;
 
-
 DWORD WINAPI waitForSamp()
 {
 	int startTime = GetTickCount();

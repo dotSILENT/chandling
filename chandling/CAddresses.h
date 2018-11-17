@@ -17,7 +17,6 @@ public:
 		switch (ver)
 		{
 		case SAMP_037_R2:
-		{
 			OFFSET_SampInfo = 0x21A100;
 			OFFSET_SampInfo_pPools = 0x3C5;
 			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
@@ -25,7 +24,16 @@ public:
 			OFFSET_SampInfo_Hostname = 0x11D;
 			FUNC_IDFromGtaPtr = 0x1b180;
 			FUNC_CVehiclePool_CreateVehicle = 0x1B670;
-		}
+			break;
+		case SAMP_03DL:
+			OFFSET_SampInfo = 0x2ACA24;
+			OFFSET_SampInfo_pPools = 0x3DE;
+			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
+			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x0; // ADD
+			OFFSET_SampInfo_Hostname = 0x131;
+			FUNC_IDFromGtaPtr = 0x0; // ADD
+			FUNC_CVehiclePool_CreateVehicle = 0x0; // ADD
+			break;
 		}
 	}
 

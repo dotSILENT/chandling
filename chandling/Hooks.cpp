@@ -4,12 +4,13 @@
 #include <unordered_map>
 #include "detours.h"
 #pragma comment(lib, "detours.lib")
-#include "HandlingManager.h"
-
-CHandlingManager cHandlingMgr;
+#include "raknet\RakClientInterface.h"
+#include "hook_utils.h"
 
 tCreateCar originalCCarCtrlCreateCar = nullptr;
 tSampCreateVehicle originalSampCreateVehicle = nullptr;
+
+tReceive originalReceive = nullptr;
 
 tSampIDFromGtaPtr SampIDFromGtaPtr = nullptr; // Get samp ID from gta struct pointer
 tSampGetVehicleStruct SampGetVehicleStruct = nullptr; // Get pointer to GTA vehicle struct from internal ID
@@ -23,6 +24,8 @@ DWORD dwSampPools = NULL;
 DWORD dwSampVehPool = NULL;
 
 CVehicle** IdToPtrTranslation = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct pointer to CVehicle class
+
+RakClientInterface* pRakClientInterface = nullptr;
 
 // This GTA func is used to create vehicles (excluding trains) for scripts, SAMP uses it to create vehicles
 // It's called everytime a vehicle streams in, giving us it's direct CVehicle pointer
@@ -58,6 +61,13 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmt
 	return ret;
 }
 
+Packet* __fastcall hookedReceive(RakClientInterface* thisptr, DWORD EDX)
+{
+	Packet* pkt = originalReceive(thisptr);
+	if (pkt != nullptr)
+		DebugPrint("Receive pkt %d\n", (BYTE)pkt->data[0]);
+	return pkt;
+}
 
 void SetupGtaHooks()
 {
@@ -85,6 +95,8 @@ bool SetupSampHooks()
 		IdToPtrTranslation = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles));
 		SampIDFromGtaPtr = (tSampIDFromGtaPtr)(dwSampDLL + Addr.FUNC_IDFromGtaPtr);
 		originalSampCreateVehicle = (tSampCreateVehicle)DetourFunction((PBYTE)(dwSampDLL + Addr.FUNC_CVehiclePool_CreateVehicle), (PBYTE)hookedSampCreateVehicle);
+
+		originalReceive = (tReceive)DetourFunction((PBYTE)(FindPattern(dwSampDLL, "\x6A\x04\x8B\xCE\xC7\x44\x24\x00\x00\x00\x00\x00", "xxxxxxx?????") - 60), (PBYTE)hookedReceive);
 		return true;
 	}
 	return false;
