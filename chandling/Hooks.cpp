@@ -6,6 +6,8 @@
 #pragma comment(lib, "detours.lib")
 #include "raknet\RakClientInterface.h"
 #include "hook_utils.h"
+#include "PacketEnum.h"
+#include "Actions.h"
 
 tCreateCar originalCCarCtrlCreateCar = nullptr;
 tSampCreateVehicle originalSampCreateVehicle = nullptr;
@@ -61,18 +63,47 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmt
 	return ret;
 }
 
-Packet* __fastcall hookedReceive(RakClientInterface* thisptr, DWORD EDX)
+static bool bWelcomeSent = false;
+static bool bSendWelcome = false;
+Packet* __fastcall hookedReceive(RakClientInterface* thisptr)
 {
 	Packet* pkt = originalReceive(thisptr);
+	
+	if (bSendWelcome)
+	{
+		bSendWelcome = false;
+		bWelcomeSent = true;
+		BitStream bs;
+		bs.Write((BYTE)ID_CHANDLING);
+		bs.Write((BYTE)CHandlingAction::ACTION_INIT);
+		bs.Write((int)rand());
+
+		thisptr->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
+
+		DebugPrint("CHandling Init packet sent");
+	}
+
 	if (pkt != nullptr)
-		DebugPrint("Receive pkt %d\n", (BYTE)pkt->data[0]);
+	{
+		if (!bWelcomeSent)
+			bSendWelcome = true; // delay the sending to the next call of this function (we send our packet right after the first received one)
+
+		if ((BYTE)pkt->data[0] == ID_CHANDLING) // handle our custom 'action' packet
+		{
+			if (pkt->length > sizeof(BYTE) * 2)
+			{
+				BitStream bs(&pkt->data[2], pkt->length - 2, false);
+				Actions::Process((CHandlingAction)pkt->data[1], &bs);
+			}
+			return NULL;
+		}
+	}
 	return pkt;
 }
 
 void SetupGtaHooks()
 {
 	originalCCarCtrlCreateCar = (tCreateCar)DetourFunction((PBYTE)FUNC_CCarCtrl_CreateCarForScript, (PBYTE)hookedCCarCtrlCreateCar);
-
 }
 
 bool SetupSampHooks()

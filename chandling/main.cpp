@@ -1,6 +1,7 @@
 #include "main.h"
 #include "sampVersions.h"
 #include "Hooks.h"
+#include "ActionCallbacks.h"
 
 
 // globals
@@ -48,6 +49,7 @@ DWORD WINAPI waitForSamp()
 			if (!SetupSampHooks())
 				gInited = false;
 			DebugPrint("SAMP Initialized, host: %s\n", (char*)((*(DWORD*)info) + Addr.OFFSET_SampInfo_Hostname));
+			RegisterAllActionCallbacks();
 			//break; // TODO: Move this to some non-threaded equivalent, preferably some GTA hook
 		}
 		

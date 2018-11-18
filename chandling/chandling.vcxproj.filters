@@ -39,6 +39,12 @@
     <ClCompile Include="raknet\BitStream.cpp">
       <Filter>raknet</Filter>
     </ClCompile>
+    <ClCompile Include="Actions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionCallbacks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -78,6 +84,15 @@
       <Filter>raknet</Filter>
     </ClInclude>
     <ClInclude Include="hook_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionCallbacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
