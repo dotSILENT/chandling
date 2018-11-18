@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2FE3CEE5-FDDD-4A35-918D-030DC3EEF913}</ProjectGuid>
+    <ProjectGuid>{B9957E9F-0431-4AA3-99F6-82FDD12C19BD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>chandling</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -71,12 +71,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <TargetExt>.asi</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.asi</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -87,7 +89,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;CHANDLING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;CHANDLING_EXPORTS;%(PreprocessorDefinitions);TRIALDLL_EXPORT</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -117,7 +119,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CHANDLING_EXPORTS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CHANDLING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -125,6 +127,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,36 +150,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="hookfunctions.cpp" />
+    <ClCompile Include="ActionCallbacks.cpp" />
+    <ClCompile Include="Actions.cpp" />
+    <ClCompile Include="CAddresses.h" />
+    <ClCompile Include="HandlingManager.cpp" />
+    <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="raknet\BitStream.cpp" />
-    <ClCompile Include="raknet\DS_HuffmanEncodingTree.cpp" />
-    <ClCompile Include="raknet\StringCompressor.cpp" />
+    <ClCompile Include="sampVersions.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CVector.h" />
-    <ClInclude Include="game\CSomeClassess.h" />
-    <ClInclude Include="game\game.h" />
+    <ClInclude Include="ActionCallbacks.h" />
+    <ClInclude Include="Actions.h" />
     <ClInclude Include="HandlingEnum.h" />
-    <ClInclude Include="hookfunctions.h" />
+    <ClInclude Include="HandlingManager.h" />
+    <ClInclude Include="Hooks.h" />
+    <ClInclude Include="detours.h" />
+    <ClInclude Include="game\CEntity.h" />
+    <ClInclude Include="game\CSomeClassess.h" />
+    <ClInclude Include="game\CVector.h" />
+    <ClInclude Include="game\game.h" />
+    <ClInclude Include="hook_utils.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="Manager.h" />
+    <ClInclude Include="PacketEnum.h" />
     <ClInclude Include="raknet\BitStream.h" />
-    <ClInclude Include="raknet\DS_HuffmanEncodingTree.h" />
-    <ClInclude Include="raknet\DS_HuffmanEncodingTreeNode.h" />
-    <ClInclude Include="raknet\DS_LinkedList.h" />
-    <ClInclude Include="raknet\DS_List.h" />
-    <ClInclude Include="raknet\DS_Map.h" />
-    <ClInclude Include="raknet\DS_OrderedList.h" />
-    <ClInclude Include="raknet\DS_Queue.h" />
-    <ClInclude Include="raknet\Export.h" />
-    <ClInclude Include="raknet\NetworkTypes.h" />
-    <ClInclude Include="raknet\PacketPriority.h" />
     <ClInclude Include="raknet\RakClientInterface.h" />
-    <ClInclude Include="raknet\RakNetDefines.h" />
-    <ClInclude Include="raknet\RakNetStatistics.h" />
-    <ClInclude Include="raknet\StringCompressor.h" />
-    <ClInclude Include="samp.h" />
+    <ClInclude Include="sampVersions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="detours.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="detours.pdb" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 #pragma once
 
-enum handlingAttributes
+enum eHandlingAttribute
 {
 	HANDL_IDENTIFIER = 1, // A
 	HANDL_FMASS,	// B
@@ -41,7 +41,7 @@ enum handlingAttributes
 };
 
 
-enum eHandlingModelFlags
+enum eHandlingModelFlag
 {
 	MODEL_IS_VAN = 1 << 0,
 	MODEL_IS_BUS = 1 << 2,
@@ -76,7 +76,7 @@ enum eHandlingModelFlags
 	MODEL_IS_HATCHBACK = 1 << 31
 };
 
-enum eHandlingFlags
+enum eHandlingFlag
 {
 	HANDL_1G_BOOST = 1 << 0,
 	HANDL_2G_BOOST = 1 << 1,

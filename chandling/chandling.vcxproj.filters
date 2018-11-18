@@ -13,99 +13,97 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="raknet">
-      <UniqueIdentifier>{6a671107-4f9d-41a8-8372-237ae903046e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game">
-      <UniqueIdentifier>{b19dcd89-6012-4f11-aa75-33c62e2d220d}</UniqueIdentifier>
+      <UniqueIdentifier>{e8e9b25c-d186-4e32-98f3-79ad29b6a325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raknet">
+      <UniqueIdentifier>{d7c1fb73-6c2e-4a02-bf53-5256b7516a02}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CAddresses.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HandlingManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sampVersions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="raknet\BitStream.cpp">
       <Filter>raknet</Filter>
     </ClCompile>
-    <ClCompile Include="raknet\DS_HuffmanEncodingTree.cpp">
-      <Filter>raknet</Filter>
+    <ClCompile Include="Actions.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="raknet\StringCompressor.cpp">
-      <Filter>raknet</Filter>
-    </ClCompile>
-    <ClCompile Include="hookfunctions.cpp">
+    <ClCompile Include="ActionCallbacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="raknet\BitStream.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\DS_HuffmanEncodingTree.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\DS_HuffmanEncodingTreeNode.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\DS_LinkedList.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\DS_List.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\DS_Map.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\DS_OrderedList.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\DS_Queue.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\Export.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\NetworkTypes.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\PacketPriority.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\RakClientInterface.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\RakNetDefines.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\RakNetStatistics.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="raknet\StringCompressor.h">
-      <Filter>raknet</Filter>
-    </ClInclude>
-    <ClInclude Include="hookfunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="samp.h">
+    <ClInclude Include="sampVersions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game\game.h">
-      <Filter>Header Files\game</Filter>
-    </ClInclude>
-    <ClInclude Include="CVector.h">
+    <ClInclude Include="game\CEntity.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
     <ClInclude Include="game\CSomeClassess.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
-    <ClInclude Include="Manager.h">
+    <ClInclude Include="game\CVector.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="game\game.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="detours.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HandlingEnum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HandlingManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="raknet\BitStream.h">
+      <Filter>raknet</Filter>
+    </ClInclude>
+    <ClInclude Include="raknet\RakClientInterface.h">
+      <Filter>raknet</Filter>
+    </ClInclude>
+    <ClInclude Include="hook_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionCallbacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="detours.lib">
+      <Filter>Header Files</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="detours.pdb">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
