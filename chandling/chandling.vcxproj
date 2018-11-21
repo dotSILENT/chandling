@@ -153,7 +153,6 @@
     <ClCompile Include="ActionCallbacks.cpp" />
     <ClCompile Include="Actions.cpp" />
     <ClCompile Include="CAddresses.h" />
-    <ClCompile Include="HandlingDefault.cpp" />
     <ClCompile Include="HandlingManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="main.cpp" />
@@ -163,7 +162,6 @@
   <ItemGroup>
     <ClInclude Include="ActionCallbacks.h" />
     <ClInclude Include="Actions.h" />
-    <ClInclude Include="HandlingDefault.h" />
     <ClInclude Include="HandlingEnum.h" />
     <ClInclude Include="HandlingManager.h" />
     <ClInclude Include="Hooks.h" />
