@@ -1,4 +1,5 @@
 #include "Actions.h"
+#include "main.h"
 #include <unordered_map>
 
 static std::unordered_map<CHandlingAction, struct ActionFunc> actionMap;
@@ -15,7 +16,6 @@ namespace Actions
 
 	bool Process(CHandlingAction actionID, BitStream* bsData)
 	{
-		
 		if (actionMap.count(actionID))
 		{
 			struct ActionParams params;

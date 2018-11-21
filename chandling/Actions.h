@@ -5,11 +5,14 @@
 
 typedef unsigned char BYTE;
 
-enum CHandlingAction
+enum CHandlingAction : unsigned char
 {
 	ACTION_INIT = 10, // This is the only packet that is sent  by the player, to indicate that we can speak to him
-	ACTION_SET_VEHICLE_HANDLING = 15,
-	ACTION_SET_MODEL_HANDLING = 20
+
+	ACTION_RESET_MODEL = 15,
+	ACTION_RESET_VEHICLE,
+	ACTION_SET_VEHICLE_HANDLING,
+	ACTION_SET_MODEL_HANDLING
 };
 
 

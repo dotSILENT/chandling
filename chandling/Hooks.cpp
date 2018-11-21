@@ -82,7 +82,7 @@ Packet* __fastcall hookedReceive(RakClientInterface* thisptr)
 
 		thisptr->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
 
-		DebugPrint("CHandling Init packet sent");
+		DebugPrint("CHandling Init packet sent\n");
 	}
 
 	if (pkt != nullptr)
