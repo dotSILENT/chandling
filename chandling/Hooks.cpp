@@ -1,13 +1,15 @@
 #include "Hooks.h"
 #include "main.h"
-#include <queue>
-#include <unordered_map>
 #include "detours.h"
 #pragma comment(lib, "detours.lib")
 #include "raknet\RakClientInterface.h"
 #include "hook_utils.h"
 #include "PacketEnum.h"
 #include "Actions.h"
+#include "HandlingDefault.h"
+
+#include <queue>
+#include <unordered_map>
 
 tCreateCar originalCCarCtrlCreateCar = nullptr;
 tSampCreateVehicle originalSampCreateVehicle = nullptr;
@@ -104,6 +106,10 @@ Packet* __fastcall hookedReceive(RakClientInterface* thisptr)
 void SetupGtaHooks()
 {
 	originalCCarCtrlCreateCar = (tCreateCar)DetourFunction((PBYTE)FUNC_CCarCtrl_CreateCarForScript, (PBYTE)hookedCCarCtrlCreateCar);
+
+#ifdef DUMP_DEFAULT_HANDLINGS
+	HandlingDefault::originalLoadHandling = (t_ConvertHandlingToGameUnits)DetourFunction((PBYTE)0x6F5080, (PBYTE)HandlingDefault::loadHandlingHook);
+#endif
 }
 
 bool SetupSampHooks()
