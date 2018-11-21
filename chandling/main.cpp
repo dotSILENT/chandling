@@ -1,7 +1,10 @@
+#define PRINT_DEFAULT_HANDLING
+
 #include "main.h"
 #include "sampVersions.h"
 #include "Hooks.h"
 #include "ActionCallbacks.h"
+#include "HandlingDefault.h"
 
 
 // globals
@@ -45,6 +48,9 @@ DWORD WINAPI waitForSamp()
 				continue;
 
 			gInited = true;
+
+			HandlingDefault::Initialize();
+
 			DebugPrint("Setting up SAMP Hooks\n");
 			if (!SetupSampHooks())
 				gInited = false;
