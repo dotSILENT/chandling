@@ -4,14 +4,14 @@
 
 namespace HandlingDefault
 {
-	static struct tHandlingData gDefaultModelHandlings[MAX_MODELS];
+	static struct tHandlingData gDefaultModelHandlings[MAX_VEHICLE_MODELS];
 
 
 	bool copyDefaultModelHandling(int modelid, struct tHandlingData* dest)
 	{
-		if (modelid < 0 || modelid >= MAX_MODELS || dest == nullptr)
+		if (!IS_VALID_VEHICLE_MODEL(modelid) ||  dest == nullptr)
 			return false;
-		memcpy(dest, &gDefaultModelHandlings[modelid - 400], sizeof(struct tHandlingData));
+		memcpy(dest, &gDefaultModelHandlings[VEHICLE_MODEL_INDEX(modelid)], sizeof(struct tHandlingData));
 		return true;
 	}
 		

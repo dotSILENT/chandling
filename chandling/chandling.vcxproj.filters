@@ -48,6 +48,9 @@
     <ClCompile Include="HandlingDefault.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HandlingEnum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -55,9 +58,6 @@
     </ClInclude>
     <ClInclude Include="sampVersions.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game\CEntity.h">
-      <Filter>Header Files\game</Filter>
     </ClInclude>
     <ClInclude Include="game\CSomeClassess.h">
       <Filter>Header Files\game</Filter>

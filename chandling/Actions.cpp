@@ -1,5 +1,5 @@
-#include "Actions.h"
 #include "main.h"
+#include "Actions.h"
 #include <unordered_map>
 
 static std::unordered_map<CHandlingAction, struct ActionFunc> actionMap;
@@ -22,7 +22,7 @@ namespace Actions
 			params.actionID = actionID;
 			params.bsData = bsData;
 
-			actionMap[actionID].func(params);
+			actionMap[actionID].func(&params);
 			return true;
 		}
 		return false;

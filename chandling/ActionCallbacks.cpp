@@ -1,22 +1,27 @@
-#include "Actions.h"
 #include "main.h"
+#include "Actions.h"
+#include <cstdint>
 
-void OnSetVehicleHandling(ActionParams p)
+void OnSetVehicleHandling(ActionParams* p)
 {
 	DebugPrint("OnSetVehicleHandling\n");
 }
 
-void OnResetVehicle(ActionParams p)
+void OnResetVehicle(ActionParams* p)
 {
+	if (p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t))
+		return;
+	uint16_t vehicleid = 0;
+	p->bsData->Read(vehicleid);
 	DebugPrint("OnResetVehicle");
 }
 
-void OnSetModelHandling(ActionParams p)
+void OnSetModelHandling(ActionParams* p)
 {
 	DebugPrint("OnSetModelHandling");
 }
 
-void OnResetModel(ActionParams p)
+void OnResetModel(ActionParams* p)
 {
 	DebugPrint("OnResetModel");
 }

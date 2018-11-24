@@ -16,16 +16,13 @@ enum CHandlingAction : unsigned char
 };
 
 
-
-
-
 struct ActionParams
 {
 	CHandlingAction actionID;
 	BitStream* bsData;
 };
 
-typedef void(*tActionFunc)(struct ActionParams params);
+typedef void(*tActionFunc)(struct ActionParams* params);
 
 struct ActionFunc
 {

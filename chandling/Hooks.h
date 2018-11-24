@@ -1,6 +1,6 @@
 #pragma once
-#include <Windows.h>
-#include "raknet\RakClientInterface.h"
+#include "main.h"
+#include "raknet/RakClientInterface.h"
 #include "game/game.h"
 
 typedef CVehicle*(__cdecl *tCreateCar)(DWORD model, CVector pos, BYTE mission);

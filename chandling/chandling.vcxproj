@@ -154,6 +154,7 @@
     <ClCompile Include="Actions.cpp" />
     <ClCompile Include="CAddresses.h" />
     <ClCompile Include="HandlingDefault.cpp" />
+    <ClCompile Include="HandlingEnum.cpp" />
     <ClCompile Include="HandlingManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="main.cpp" />
@@ -168,7 +169,6 @@
     <ClInclude Include="HandlingManager.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="detours.h" />
-    <ClInclude Include="game\CEntity.h" />
     <ClInclude Include="game\CSomeClassess.h" />
     <ClInclude Include="game\CVector.h" />
     <ClInclude Include="game\game.h" />

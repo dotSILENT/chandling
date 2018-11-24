@@ -1,7 +1,6 @@
 #pragma once
 #include <cstdint>
-#include <windef.h>
-
+#include <minwindef.h>
 #include "CVector.h"
 #include "CSomeClassess.h"
 
@@ -605,7 +604,7 @@ struct object_info
 
 class CVehicle : public CPhysical {
 public:
-	char pad412421[0x24C]; //CAEVehicleAudioEntity      m_vehicleAudio;
+	char pad412421[0x24C]; // CAEVehicleAudioEntity      m_vehicleAudio; whole class is 0x24c
 	tHandlingData             *m_pHandlingData;
 	int* flying; //tFlyingHandlingData       *m_pFlyingHandlingData;
 	union {

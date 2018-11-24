@@ -5,6 +5,7 @@
 #include "Hooks.h"
 #include "ActionCallbacks.h"
 #include "HandlingDefault.h"
+#include "HandlingManager.h"
 
 
 // globals
@@ -50,6 +51,7 @@ DWORD WINAPI waitForSamp()
 			gInited = true;
 
 			HandlingDefault::Initialize();
+			HandlingMgr::InitializeModelDefaults();
 
 			DebugPrint("Setting up SAMP Hooks\n");
 			if (!SetupSampHooks())

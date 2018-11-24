@@ -1,8 +1,8 @@
 #pragma once
 
-enum eHandlingAttribute
+enum CHandlingAttrib
 {
-	HANDL_IDENTIFIER = 1, // A
+	HANDL_UIDENTIFIER = 1, // A
 	HANDL_FMASS,	// B
 	HANDL_FTURNMASS, // c
 	HANDL_FDRAGMULTIPLIER, // D
@@ -13,12 +13,12 @@ enum eHandlingAttribute
 	HANDL_FTRACTIONMULTIPLIER,	// J
 	HANDL_FTRACTIONLOSS,	// K
 	HANDL_FTRACTIONBIAS,	// L
-	HANDL_TRDATA_NNUMBEROFGEARS,	// M
-	HANDL_TRDATA_FMAXVELOCITY,	// N
-	HANDL_TRDATA_FENGINEACCELERATION,	// O
-	HANDL_TRDATA_FENGINEINERTIA,	// P
-	HANDL_TRDATA_NDRIVETYPE,	// Q
-	HANDL_TRDATA_NENGINETYPE,	// R
+	HANDL_TR_NNUMBEROFGEARS,	// M // transmission data, full name is too long for pawn
+	HANDL_TR_FMAXVELOCITY,	// N
+	HANDL_TR_FENGINEACCELERATION,	// O
+	HANDL_TR_FENGINEINERTIA,	// P
+	HANDL_TR_NDRIVETYPE,	// Q
+	HANDL_TR_NENGINETYPE,	// R
 	HANDL_FBRAKEDECELERATION,	// S
 	HANDL_FBRAKEBIAS,	// T
 	HANDL_BABS,	// U
@@ -31,8 +31,8 @@ enum eHandlingAttribute
 	HANDL_FSUSPENSIONBIAS,	// f
 	HANDL_FSUSPENSIONANTIDIVEMULT,	// g
 	HANDL_FSEATOFFSETDISTANCE,	// aa
-	HANDL_FCOLLISIONDAMAGEMULTIPLIER,	// ab
-	HANDL_NMONETARYVALUE,	// ac
+	HANDL_FCOLLISIONDAMAGEMULT,	// ab
+	HANDL_UIMONETARYVALUE,	// ac
 	HANDL_MODELFLAGS,	// af
 	HANDL_HANDLINGFLAGS,	// ag
 	HANDL_FRONTLIGHTS,	// ah
@@ -41,7 +41,7 @@ enum eHandlingAttribute
 };
 
 
-enum eHandlingModelFlag
+/*enum eHandlingModelFlag
 {
 	MODEL_IS_VAN = 1 << 0,
 	MODEL_IS_BUS = 1 << 2,
@@ -107,4 +107,18 @@ enum eHandlingFlag
 	HANDL_STREER_RACER = 1 << 26,
 	HANDL_UNUSED = 1 << 27,
 	HANDL_SWINGING_CHASSIS = 1 << 28
+};*/
+
+enum CHandlingAttribType
+{
+	TYPE_NONE,
+	TYPE_UINT,
+	TYPE_FLOAT,
+	TYPE_BYTE,
+	TYPE_FLAG
 };
+
+CHandlingAttribType GetHandlingAttribType(CHandlingAttrib attribute);
+bool CanSetHandlingAttrib(CHandlingAttrib attribute);
+
+void* GetHandlingAttribPtr(struct tHandlingData *handling, CHandlingAttrib attrib);

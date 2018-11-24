@@ -1,5 +1,4 @@
 #include "Hooks.h"
-#include "main.h"
 #include "detours.h"
 #pragma comment(lib, "detours.lib")
 #include "raknet\RakClientInterface.h"
@@ -7,6 +6,7 @@
 #include "PacketEnum.h"
 #include "Actions.h"
 #include "HandlingDefault.h"
+#include "HandlingManager.h"
 
 #include <queue>
 #include <unordered_map>
@@ -38,17 +38,25 @@ RakClientInterface* pRakClientInterface = nullptr;
 CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMission)
 {
 	CVehicle* ptr = originalCCarCtrlCreateCar(model, pos, isMission);
+	if (!gInited)
+		return ptr;
 	//DebugPrint("Created vehicle ptr[0x%x] model %d at %f %f %f\n", (int)ptr, model, pos.fX, pos.fY, pos.fZ);
 	qCreatedVehiclePtrs.push(ptr);
 	return ptr;
 }
 
-// To find this, search for "vehicle %u was not deleted"
-// thisptr should be the pointer to CVehiclePool
-// we use fastcall because thiscall cannot be used in some compilers
+/*
+ * To find this, search for "vehicle %u was not deleted"
+ * thisptr should be the pointer to CVehiclePool
+ * we use fastcall because thiscall cannot be used in some compilers
+ * This is where we apply custom handlings to newly created vehicles
+ */
+
 int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmth)
 {
 	int ret = originalSampCreateVehicle(thisptr, vehiclesmth);
+	if (!gInited)
+		return ret;
 	// original func calls CCarCtrl::CreateCar.. so now we should have a pointer to the created vehicle stored in qCreatedVehiclePtrs
 
 	while (!qCreatedVehiclePtrs.empty())
@@ -61,6 +69,13 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmt
 		DebugPrint("vehpool 0x%x pools 0x%x ptrFromId 0x%x\n", (int)dwSampVehPool, (int)dwSampPools, (int)IdToPtrTranslation[id]);
 
 		qCreatedVehiclePtrs.pop();
+
+		DebugPrint("init veh %d\n", HandlingMgr::InitVehicle(id, ptr->m_nModelID));
+
+		struct tHandlingData* tptr = HandlingMgr::GetHandlingPtrForVehicle(id, ptr->m_nModelID);
+
+		DebugPrint("index %d=%d dragmult %f=%f\n", tptr->m_iIndex, ptr->m_pHandlingData->m_iIndex, tptr->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
+		ptr->m_pHandlingData = tptr;
 	}
 	return ret;
 }

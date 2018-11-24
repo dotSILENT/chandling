@@ -17,7 +17,9 @@ Do not delete this comment block. Respect others' work!
 // useless classes (at least for us), so i just padded them to be the right size
 class  CEntity {
 public:
-	char pad24124214[0x38];
+	char pad3321[0x22];
+	short m_nModelID; // 34, can get vehicle model with this
+	char pad24124214[0x14];
 };
 
 class CQuaternion {
@@ -99,7 +101,7 @@ enum eWeaponType : unsigned int
 
 class CPhysical : public CEntity {
 public:
-	unsigned int m_nModel;
+	unsigned int m_nModelPhysical;
 	unsigned int m_nLastCollisionTime;
 	struct {
 		unsigned int b01 : 1;
