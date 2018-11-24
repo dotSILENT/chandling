@@ -10440,7 +10440,7 @@ namespace HandlingDefault
 		{
 			if (((t_GetHandlingId)0x6F4FD0)(thisptr, modelTranslationTable[i].handlingID) == handling->m_iIndex)
 			{
-				DebugPrint("IT'S A HIT! model %d %s index %d\n", i, modelTranslationTable[i].handlingID, handling->m_iIndex);
+				DebugPrint("IT'S A HIT! model %d %s index %d", i, modelTranslationTable[i].handlingID, handling->m_iIndex);
 				found = true;
 
 				memset(&modelHandlings[i], 0, sizeof(struct tHandlingData));
@@ -10448,7 +10448,7 @@ namespace HandlingDefault
 			}
 		}
 		if (!found)
-			DebugPrint("Model not found for handling index %d (probably R* leftover)\n", handling->m_iIndex);
+			DebugPrint("Model not found for handling index %d (probably R* leftover)", handling->m_iIndex);
 
 		if (handling->m_iIndex == 209)
 		{
@@ -10467,17 +10467,17 @@ namespace HandlingDefault
 
 #define dumpvar "gDefaultModelHandlings"
 #define dump(value,type) \
-		fprintf(f, dumpvar "[%d]." #value " = %" type ";\n", i, hn->value)
+		fprintf(f, dumpvar "[%d]." #value " = %" type ";", i, hn->value)
 #define dumpf(value) \
-		fprintf(f, dumpvar "[%d]." #value " = (float)%f;\n", i, hn->value)
+		fprintf(f, dumpvar "[%d]." #value " = (float)%f;", i, hn->value)
 
-						fprintf(f, "memset(&" dumpvar "[%d], 0, sizeof(tHandlingData));\n", i);
+						fprintf(f, "memset(&" dumpvar "[%d], 0, sizeof(tHandlingData));", i);
 						dump(m_iIndex, "d");
 						dumpf(m_fMass);
 						dumpf(field_8);
 						dumpf(m_fTurnMass);
 						dumpf(m_fDragMult);
-						//fprintf(f, dumpvar "[%d].m_vecCentreOfMass = {%f, %f, %f};\n", i, hn->m_vecCentreOfMass.fX, hn->m_vecCentreOfMass.fY, hn->m_vecCentreOfMass.fZ);
+						//fprintf(f, dumpvar "[%d].m_vecCentreOfMass = {%f, %f, %f};", i, hn->m_vecCentreOfMass.fX, hn->m_vecCentreOfMass.fY, hn->m_vecCentreOfMass.fZ);
 						dumpf(m_vecCentreOfMass.fX);
 						dumpf(m_vecCentreOfMass.fY);
 						dumpf(m_vecCentreOfMass.fZ);
@@ -10485,9 +10485,9 @@ namespace HandlingDefault
 						dumpf(m_fBuoyancyConstant);
 						dumpf(m_fTractionMultiplier);
 						// transmision data shit
-						//fprintf(f, dumpvar "[%d].m_transmissionData.m_aGears[0] = {%f, %f, %f};\n", i, hn->m_transmissionData.m_aGears[0].m_fMaxVelocity, hn->m_transmissionData.m_aGears[0].m_fChangeUpVelocity, hn->m_transmissionData.m_aGears[0].m_fChangeDownVelocity);
-						fprintf(f, dumpvar "[%d].m_transmissionData.m_nDriveType = '%c';\n", i, hn->m_transmissionData.m_nDriveType);
-						fprintf(f, dumpvar "[%d].m_transmissionData.m_nEngineType = '%c';\n", i, hn->m_transmissionData.m_nEngineType);
+						//fprintf(f, dumpvar "[%d].m_transmissionData.m_aGears[0] = {%f, %f, %f};", i, hn->m_transmissionData.m_aGears[0].m_fMaxVelocity, hn->m_transmissionData.m_aGears[0].m_fChangeUpVelocity, hn->m_transmissionData.m_aGears[0].m_fChangeDownVelocity);
+						fprintf(f, dumpvar "[%d].m_transmissionData.m_nDriveType = '%c';", i, hn->m_transmissionData.m_nDriveType);
+						fprintf(f, dumpvar "[%d].m_transmissionData.m_nEngineType = '%c';", i, hn->m_transmissionData.m_nEngineType);
 						dump(m_transmissionData.m_nNumberOfGears, "d"); // it should be char/byte but since its a number..
 						dump(m_transmissionData.field_4B, "d");
 						dump(m_transmissionData.m_nHandlingFlags, "d");
@@ -10515,15 +10515,15 @@ namespace HandlingDefault
 						dumpf(m_fSuspensionBiasBetweenFrontAndRear);
 						dumpf(m_fSuspensionAntiDiveMultiplier);
 						dumpf(m_fCollisionDamageMultiplier);
-						fprintf(f, dumpvar "[%d].m_nModelFlags = ( eVehicleHandlingModelFlags)0x%x;\n", i, hn->m_nModelFlags);
-						fprintf(f, dumpvar "[%d].m_nHandlingFlags = (eVehicleHandlingFlags)0x%x;\n", i, hn->m_nHandlingFlags);
+						fprintf(f, dumpvar "[%d].m_nModelFlags = ( eVehicleHandlingModelFlags)0x%x;", i, hn->m_nModelFlags);
+						fprintf(f, dumpvar "[%d].m_nHandlingFlags = (eVehicleHandlingFlags)0x%x;", i, hn->m_nHandlingFlags);
 						dumpf(m_fSeatOffsetDistance);
 						dump(m_nMonetaryValue, "d");
-						fprintf(f, dumpvar "[%d].m_nFrontLights = (eVehicleLightsSize)%d;\n", i, hn->m_nFrontLights); //dump(m_nFrontLights, "d");
-						fprintf(f, dumpvar "[%d].m_nRearLights = (eVehicleLightsSize)%d;\n", i, hn->m_nRearLights);//dump(m_nRearLights, "d");
+						fprintf(f, dumpvar "[%d].m_nFrontLights = (eVehicleLightsSize)%d;", i, hn->m_nFrontLights); //dump(m_nFrontLights, "d");
+						fprintf(f, dumpvar "[%d].m_nRearLights = (eVehicleLightsSize)%d;", i, hn->m_nRearLights);//dump(m_nRearLights, "d");
 						dump(m_nAnimGroup, "d");
 
-						fprintf(f, "\n");
+						fprintf(f, "");
 #undef dump
 #undef dumpf
 #undef dumpvar
@@ -10531,7 +10531,7 @@ namespace HandlingDefault
 
 					fclose(f);
 				}
-				else DebugPrint("Couldn't open default_handling_dump.txt\n");
+				else DebugPrint("Couldn't open default_handling_dump.txt");
 				written = true;
 			}
 		}

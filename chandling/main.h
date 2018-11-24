@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <stdarg.h>
 #include <cstdio>
+#include "game/game.h"
 
 #define DEBUG
 
@@ -10,7 +11,7 @@
 //#define DUMP_DEFAULT_HANDLINGS
 
 #ifdef DEBUG
-#define DebugPrint(...) printf("[cHandling] " __VA_ARGS__)
+#define DebugPrint(str,...) printf("[cHandling] " str "\n", __VA_ARGS__)
 #else 
 #define DebugPrint(...)
 #endif
@@ -22,7 +23,7 @@
 	(id >= 1 && id <= MAX_VEHICLES)
 
 #define IS_VALID_VEHICLE_MODEL(modelid) \
-	(modelid > 400 && modelid < MAX_VEHICLE_MODELS+400)
+	(modelid >= 400 && modelid < MAX_VEHICLE_MODELS+400)
 
 #define VEHICLE_MODEL_INDEX(modelid) \
 	(modelid - 400)
@@ -32,4 +33,5 @@
 extern CAddresses Addr;
 extern bool gInited;
 extern DWORD dwSampDLL;
+extern CVehicle** pID2PTR;
 

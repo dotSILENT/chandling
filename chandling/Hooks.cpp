@@ -27,8 +27,6 @@ DWORD dwSampInfo = NULL;
 DWORD dwSampPools = NULL;
 DWORD dwSampVehPool = NULL;
 
-CVehicle** IdToPtrTranslation = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct pointer to CVehicle class
-
 RakClientInterface* pRakClientInterface = nullptr;
 
 // This GTA func is used to create vehicles (excluding trains) for scripts, SAMP uses it to create vehicles
@@ -40,7 +38,7 @@ CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMissi
 	CVehicle* ptr = originalCCarCtrlCreateCar(model, pos, isMission);
 	if (!gInited)
 		return ptr;
-	//DebugPrint("Created vehicle ptr[0x%x] model %d at %f %f %f\n", (int)ptr, model, pos.fX, pos.fY, pos.fZ);
+	//DebugPrint("Created vehicle ptr[0x%x] model %d at %f %f %f", (int)ptr, model, pos.fX, pos.fY, pos.fZ);
 	qCreatedVehiclePtrs.push(ptr);
 	return ptr;
 }
@@ -64,18 +62,23 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmt
 		CVehicle* ptr = qCreatedVehiclePtrs.front();
 
 		int id = SampIDFromGtaPtr((DWORD*)dwSampVehPool, (int)ptr);
-		DebugPrint("SAMP ID FROM 0x%x -> %d\n", (int)ptr, id);
+		DebugPrint("SAMP ID FROM 0x%x -> %d", (int)ptr, id);
 
-		DebugPrint("vehpool 0x%x pools 0x%x ptrFromId 0x%x\n", (int)dwSampVehPool, (int)dwSampPools, (int)IdToPtrTranslation[id]);
+		DebugPrint("vehpool 0x%x pools 0x%x ptrFromId 0x%x", (int)dwSampVehPool, (int)dwSampPools, (int)pID2PTR[id]);
 
 		qCreatedVehiclePtrs.pop();
 
-		DebugPrint("init veh %d\n", HandlingMgr::InitVehicle(id, ptr->m_nModelID));
+		HandlingMgr::InitVehicle(id, ptr->m_nModelID);
 
-		struct tHandlingData* tptr = HandlingMgr::GetHandlingPtrForVehicle(id, ptr->m_nModelID);
+		struct tHandlingData* pHandl = HandlingMgr::GetHandlingPtrForVehicle(id, ptr->m_nModelID);
 
-		DebugPrint("index %d=%d dragmult %f=%f\n", tptr->m_iIndex, ptr->m_pHandlingData->m_iIndex, tptr->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
-		ptr->m_pHandlingData = tptr;
+		if (pHandl == nullptr || pHandl->m_iIndex != ptr->m_pHandlingData->m_iIndex)
+		{
+			DebugPrint("Invalid handling pointer, id %d model %d", id, ptr->m_nModelID);
+			return ret;
+		}
+		DebugPrint("index %d=%d dragmult %f=%f", pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
+		ptr->m_pHandlingData = pHandl;
 	}
 	return ret;
 }
@@ -97,7 +100,7 @@ Packet* __fastcall hookedReceive(RakClientInterface* thisptr)
 
 		thisptr->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
 
-		DebugPrint("CHandling Init packet sent\n");
+		DebugPrint("CHandling Init packet sent");
 	}
 
 	if (pkt != nullptr)
@@ -134,17 +137,17 @@ bool SetupSampHooks()
 		dwSampInfo = *(DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
 		if ((PDWORD)dwSampInfo == nullptr)
 			return false;
-		DebugPrint("dwSampInfo 0x%x @ 0x%x\n", dwSampInfo, (dwSampDLL + Addr.OFFSET_SampInfo));
+		DebugPrint("dwSampInfo 0x%x @ 0x%x", dwSampInfo, (dwSampDLL + Addr.OFFSET_SampInfo));
 		dwSampPools = *(DWORD*)(dwSampInfo + Addr.OFFSET_SampInfo_pPools);
 		if ((PDWORD)dwSampPools == nullptr)
 			return false;
-		DebugPrint("dwSampPools 0x%x\n", dwSampPools);
+		DebugPrint("dwSampPools 0x%x", dwSampPools);
 		dwSampVehPool = *(DWORD*)(dwSampPools + Addr.OFFSET_SampInfo_pPools_pVehiclePool);
 		if ((PDWORD)dwSampVehPool == nullptr)
 			return false;
-		DebugPrint("dwSampVehPool 0x%x\n", dwSampVehPool);
+		DebugPrint("dwSampVehPool 0x%x", dwSampVehPool);
 
-		IdToPtrTranslation = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles));
+		pID2PTR = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles));
 		SampIDFromGtaPtr = (tSampIDFromGtaPtr)(dwSampDLL + Addr.FUNC_IDFromGtaPtr);
 		originalSampCreateVehicle = (tSampCreateVehicle)DetourFunction((PBYTE)(dwSampDLL + Addr.FUNC_CVehiclePool_CreateVehicle), (PBYTE)hookedSampCreateVehicle);
 

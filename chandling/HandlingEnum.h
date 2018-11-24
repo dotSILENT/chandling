@@ -1,6 +1,6 @@
 #pragma once
 
-enum CHandlingAttrib
+enum CHandlingAttrib : unsigned char
 {
 	HANDL_UIDENTIFIER = 1, // A
 	HANDL_FMASS,	// B
@@ -109,7 +109,7 @@ enum eHandlingFlag
 	HANDL_SWINGING_CHASSIS = 1 << 28
 };*/
 
-enum CHandlingAttribType
+enum CHandlingAttribType : unsigned char
 {
 	TYPE_NONE,
 	TYPE_UINT,

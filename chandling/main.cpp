@@ -13,6 +13,7 @@ DWORD dwSampDLL = NULL;
 eSampVersion sampVer = SAMP_000;
 CAddresses Addr;
 bool gInited = false;
+CVehicle** pID2PTR = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct CVehicle class pointer
 
 DWORD WINAPI waitForSamp()
 {
@@ -21,13 +22,13 @@ DWORD WINAPI waitForSamp()
 	{
 		if (!gInited && GetTickCount() - startTime >= 35 * 1000)
 		{
-			DebugPrint("SAMP Module not found, exiting...\n");
+			DebugPrint("SAMP Module not found, exiting...");
 			break;
 		}
 
 		if (dwSampDLL == NULL && (dwSampDLL = (DWORD)GetModuleHandleA("samp.dll")) != NULL)
 		{
-			DebugPrint("SAMP Module loaded at 0x%x\n", (DWORD)dwSampDLL);
+			DebugPrint("SAMP Module loaded at 0x%x", (DWORD)dwSampDLL);
 		}
 		else if (!gInited)
 		{
@@ -53,10 +54,10 @@ DWORD WINAPI waitForSamp()
 			HandlingDefault::Initialize();
 			HandlingMgr::InitializeModelDefaults();
 
-			DebugPrint("Setting up SAMP Hooks\n");
+			DebugPrint("Setting up SAMP Hooks");
 			if (!SetupSampHooks())
 				gInited = false;
-			DebugPrint("SAMP Initialized, host: %s\n", (char*)((*(DWORD*)info) + Addr.OFFSET_SampInfo_Hostname));
+			DebugPrint("SAMP Initialized, host: %s", (char*)((*(DWORD*)info) + Addr.OFFSET_SampInfo_Hostname));
 			RegisterAllActionCallbacks();
 			//break; // TODO: Move this to some non-threaded equivalent, preferably some GTA hook
 		}
