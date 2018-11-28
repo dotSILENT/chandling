@@ -25,14 +25,14 @@ public:
 			FUNC_IDFromGtaPtr = 0x1b180;
 			FUNC_CVehiclePool_CreateVehicle = 0x1B670;
 			break;
-		case SAMP_03DL:
+		case SAMP_03DL: // R1
 			OFFSET_SampInfo = 0x2ACA24;
 			OFFSET_SampInfo_pPools = 0x3DE;
 			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
-			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x0; // ADD
+			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
 			OFFSET_SampInfo_Hostname = 0x131;
-			FUNC_IDFromGtaPtr = 0x0; // ADD
-			FUNC_CVehiclePool_CreateVehicle = 0x0; // ADD
+			FUNC_IDFromGtaPtr = 0x1E650;
+			FUNC_CVehiclePool_CreateVehicle = 0x1EB40;
 			break;
 		}
 	}
@@ -41,8 +41,8 @@ public:
 	DWORD	OFFSET_SampInfo_pPools = 0;
 	DWORD	OFFSET_SampInfo_pPools_pVehiclePool = 0;
 	DWORD	OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0;
-	DWORD	OFFSET_SampInfo_Hostname = 0;
+	DWORD	OFFSET_SampInfo_Hostname = 0; // not really needed, can be removed before the final release
 
-	DWORD	FUNC_IDFromGtaPtr = 0;
+	DWORD	FUNC_IDFromGtaPtr = 0; // can be found by searching for 'Stay within the ~r~world boundaries'
 	DWORD	FUNC_CVehiclePool_CreateVehicle = 0;
 };
