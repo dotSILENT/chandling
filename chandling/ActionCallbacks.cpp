@@ -23,17 +23,17 @@ void OnSetVehicleHandling(ActionParams* p)
 	for (int i = 0; i < count; i++)
 	{
 		p->bsData->Read(attrib);
-		p->bsData->Read(type);
+		ok = p->bsData->Read(type);
 		mod.type = (CHandlingAttribType)type;
 		mod.attrib = (CHandlingAttrib)attrib;
 		switch ((CHandlingAttribType)type)
 		{
 		case TYPE_BYTE:
-			p->bsData->Read(mod.bval);
+			ok = p->bsData->Read(mod.bval);
 			break;
 		case TYPE_UINT:
 		case TYPE_FLAG:
-			p->bsData->Read(mod.uival);
+			ok = p->bsData->Read(mod.uival);
 			break;
 		case TYPE_FLOAT:
 			ok = p->bsData->Read(mod.fval);
@@ -67,6 +67,15 @@ void OnSetModelHandling(ActionParams* p)
 
 void OnResetModel(ActionParams* p)
 {
+	if (p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t))
+		return;
+	uint16_t modelid = 0;
+	p->bsData->Read(modelid);
+
+	if (IS_VALID_VEHICLE_MODEL(modelid))
+		return;
+	
+	HandlingMgr::InitializeModelDefaults(modelid);
 	DebugPrint("OnResetModel");
 }
 

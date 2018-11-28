@@ -42,7 +42,7 @@ namespace HandlingMgr
 		}
 
 	public:
-		int		modelID = -1;
+		uint16_t		modelID = -1;
 		struct tHandlingData	rawHandling;
 		struct tHandlingData	calcHandling;
 
@@ -119,25 +119,24 @@ namespace HandlingMgr
 		return vehicleHandlings[vehicleID].pCurrentHandling;
 	}
 
-	bool RecalculateModelHandlings() // this gets only called once, after the game is done loading all the handlings
+	// if modelid = 0 then this function is applied to every model
+	void InitializeModelDefaults(uint16_t modelid /* = 0 */)
 	{
-		for (int i = 0; i < MAX_VEHICLE_MODELS; i++)
+		if (modelid == 0)
 		{
-			modelHandlings[i].Recalculate();
+			for (int i = 0; i < MAX_VEHICLE_MODELS; i++)
+			{
+				HandlingDefault::copyDefaultModelHandling(i + 400, &modelHandlings[i].rawHandling);
+				modelHandlings[i].modelID = i + 400;
+				modelHandlings[i].Recalculate();
+			}
+			modelsInitialized = true;
 		}
-		return true;
-	}
-
-	void InitializeModelDefaults()
-	{
-		for (int i = 0; i < MAX_VEHICLE_MODELS; i++)
+		else if (IS_VALID_VEHICLE_MODEL(modelid))
 		{
-			HandlingDefault::copyDefaultModelHandling(i + 400, &modelHandlings[i].rawHandling);
-			modelHandlings[i].modelID = i + 400;
+			HandlingDefault::copyDefaultModelHandling(VEHICLE_MODEL_INDEX(modelid), &modelHandlings[VEHICLE_MODEL_INDEX(modelid)].rawHandling);
+			modelHandlings[VEHICLE_MODEL_INDEX(modelid)].Recalculate();
 		}
-
-		RecalculateModelHandlings();
-		modelsInitialized = true;
 	}
 
 	bool AddVehicleMod(int vehicleID, const struct stHandlingMod mod)
@@ -145,7 +144,7 @@ namespace HandlingMgr
 		if (!IS_VALID_VEHICLEID(vehicleID) || !CanSetHandlingAttrib(mod.attrib))
 			return false;
 
-		// TODO: Add some validation
+		// TODO: maybe add some validation (as for now validation of values is only on the server side)
 		vehicleHandlings[vehicleID].AddRawMod(mod);
 		return true;
 	}

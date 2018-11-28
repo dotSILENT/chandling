@@ -20,9 +20,7 @@ namespace HandlingMgr
 
 	tHandlingData*	GetHandlingPtrForVehicle(int vehicleID, int model);
 
-	bool	RecalculateModelHandlings(); // this gets only called once, after the game is done loading all the handlings
-
-	void	InitializeModelDefaults(); // this needs to be called first
+	void	InitializeModelDefaults(uint16_t modelid = 0); // this needs to be called first
 
 	void	RecalculateVehicle(int vehicleID);
 

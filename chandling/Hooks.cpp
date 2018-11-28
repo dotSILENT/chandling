@@ -29,10 +29,12 @@ DWORD dwSampVehPool = NULL;
 
 RakClientInterface* pRakClientInterface = nullptr;
 
-// This GTA func is used to create vehicles (excluding trains) for scripts, SAMP uses it to create vehicles
-// It's called everytime a vehicle streams in, giving us it's direct CVehicle pointer
-// but in order to find out what's the SAMP ID of this vehicle, we need to check it later
-// using SampIDFromGtaPtr, because at this point there is no ID assigned to it.
+/*
+	This GTA func is used to create vehicles (excluding trains) for scripts, SAMP uses it to create vehicles
+	It's called everytime a vehicle streams in, giving us it's direct CVehicle pointer
+	but in order to find out what's the SAMP ID of this vehicle, we need to check it later
+	using SampIDFromGtaPtr, because at this point there is no ID assigned to it.
+*/
 CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMission)
 {
 	CVehicle* ptr = originalCCarCtrlCreateCar(model, pos, isMission);
@@ -96,7 +98,7 @@ Packet* __fastcall hookedReceive(RakClientInterface* thisptr)
 		BitStream bs;
 		bs.Write((BYTE)ID_CHANDLING);
 		bs.Write((BYTE)CHandlingAction::ACTION_INIT);
-		bs.Write((int)rand());
+		bs.Write((int)rand()); // TODO replace to some version number
 
 		thisptr->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
 
