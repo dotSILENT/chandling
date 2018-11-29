@@ -23,7 +23,7 @@ public:
 			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
 			OFFSET_SampInfo_Hostname = 0x11D;
 			FUNC_IDFromGtaPtr = 0x1b180;
-			FUNC_CVehiclePool_CreateVehicle = 0x1B670;
+			//FUNC_CVehiclePool_CreateVehicle = 0x1B670;
 			break;
 		case SAMP_03DL: // R1
 			OFFSET_SampInfo = 0x2ACA24;
@@ -32,7 +32,7 @@ public:
 			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
 			OFFSET_SampInfo_Hostname = 0x131;
 			FUNC_IDFromGtaPtr = 0x1E650;
-			FUNC_CVehiclePool_CreateVehicle = 0x1EB40;
+			//FUNC_CVehiclePool_CreateVehicle = 0x1EB40;
 			break;
 		}
 	}
@@ -44,5 +44,5 @@ public:
 	DWORD	OFFSET_SampInfo_Hostname = 0; // not really needed, can be removed before the final release
 
 	DWORD	FUNC_IDFromGtaPtr = 0; // can be found by searching for 'Stay within the ~r~world boundaries'
-	DWORD	FUNC_CVehiclePool_CreateVehicle = 0;
+	//DWORD	FUNC_CVehiclePool_CreateVehicle = 0; // FindPattern finds it for us, but it can be found by searching for 'vehicle %u was not deleted'
 };
