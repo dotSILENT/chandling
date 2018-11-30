@@ -134,7 +134,7 @@ namespace HandlingMgr
 		}
 		else if (IS_VALID_VEHICLE_MODEL(modelid))
 		{
-			HandlingDefault::copyDefaultModelHandling(VEHICLE_MODEL_INDEX(modelid), &modelHandlings[VEHICLE_MODEL_INDEX(modelid)].rawHandling);
+			HandlingDefault::copyDefaultModelHandling(modelid, &modelHandlings[VEHICLE_MODEL_INDEX(modelid)].rawHandling);
 			modelHandlings[VEHICLE_MODEL_INDEX(modelid)].Recalculate();
 		}
 	}
@@ -167,6 +167,25 @@ namespace HandlingMgr
 				ptr->m_pHandlingData = vehicleHandlings[vehicleID].pCurrentHandling;
 			}
 		}
+		return true;
+	}
+
+	bool AddModelMod(int modelid, const struct stHandlingMod mod)
+	{
+		if (!IS_VALID_VEHICLE_MODEL(modelid) || !CanSetHandlingAttrib(mod.attrib))
+			return false;
+
+		modelHandlings[VEHICLE_MODEL_INDEX(modelid)].AddRawMod(mod);
+		return true;
+	}
+
+	bool ApplyModelMods(int modelid)
+	{
+		if (!IS_VALID_VEHICLE_MODEL(modelid))
+			return false;
+
+		if (modelHandlings[VEHICLE_MODEL_INDEX(modelid)].hasMods())
+			modelHandlings[VEHICLE_MODEL_INDEX(modelid)].Recalculate();
 		return true;
 	}
 }

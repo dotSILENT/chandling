@@ -28,4 +28,8 @@ namespace HandlingMgr
 
 	bool	AddVehicleMod(int vehicleID, const struct stHandlingMod mod); // this just applies the mod to rawHandling, you need to run RecalculateVehicle() on your own
 
+	bool	AddModelMod(int modelid, const struct stHandlingMod mod);
+
+	bool	ApplyModelMods(int modelid);
+
 };

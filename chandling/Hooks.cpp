@@ -17,7 +17,6 @@ tSampCreateVehicle originalSampCreateVehicle = nullptr;
 tReceive originalReceive = nullptr;
 
 tSampIDFromGtaPtr SampIDFromGtaPtr = nullptr; // Get samp ID from gta struct pointer
-tSampGetVehicleStruct SampGetVehicleStruct = nullptr; // Get pointer to GTA vehicle struct from internal ID
 
 // Queue used for getting samp ID from pointer, as we can't do it straight away
 std::queue<CVehicle*> qCreatedVehiclePtrs;
@@ -79,7 +78,7 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmt
 			DebugPrint("Invalid handling pointer, id %d model %d", id, ptr->m_nModelID);
 			return ret;
 		}
-		DebugPrint("index %d=%d dragmult %f=%f", pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
+		DebugPrint("pHandl 0x%x index %d=%d dragmult %f=%f", (int)pHandl, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
 		ptr->m_pHandlingData = pHandl;
 	}
 	return ret;
@@ -151,7 +150,6 @@ bool SetupSampHooks()
 
 		pID2PTR = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles));
 		SampIDFromGtaPtr = (tSampIDFromGtaPtr)(dwSampDLL + Addr.FUNC_IDFromGtaPtr);
-		//originalSampCreateVehicle = (tSampCreateVehicle)DetourFunction((PBYTE)(dwSampDLL + Addr.FUNC_CVehiclePool_CreateVehicle), (PBYTE)hookedSampCreateVehicle);
 		DWORD dwSampCrtVeh = FindPattern(dwSampDLL, "\x56\x8B\x74\x24\x08\x0F\xB7\x06\x57\x8B\xF9", "xxxxxxxxxxx");
 		if (!dwSampCrtVeh)
 			return false;
