@@ -3,70 +3,13 @@
 #include "main.h"
 #include "sampVersions.h"
 #include "Hooks.h"
-#include "ActionCallbacks.h"
-#include "HandlingDefault.h"
-#include "HandlingManager.h"
-
 
 // globals
 DWORD dwSampDLL = NULL;
-eSampVersion sampVer = SAMP_000;
+eSampVersion gSampVer = SAMP_000;
 CAddresses Addr;
 bool gInited = false;
 CVehicle** pID2PTR = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct CVehicle class pointer
-
-DWORD WINAPI waitForSamp()
-{
-	int startTime = GetTickCount();
-	while (true)
-	{
-		if (!gInited && GetTickCount() - startTime >= 35 * 1000)
-		{
-			DebugPrint("SAMP Module not found, exiting...");
-			break;
-		}
-
-		if (dwSampDLL == NULL && (dwSampDLL = (DWORD)GetModuleHandleA("samp.dll")) != NULL)
-		{
-			DebugPrint("SAMP Module loaded at 0x%x", (DWORD)dwSampDLL);
-		}
-		else if (!gInited)
-		{
-			if (sampVer == SAMP_000)
-			{
-				if ((sampVer = DetectSampVersion(dwSampDLL)) != SAMP_000)
-					Addr.Init(sampVer);
-				else
-				{
-					DebugPrint("Unsupported SA:MP version, aborting...");
-
-					ExitThread(EXIT_SUCCESS);
-					return 1;
-				}
-			}
-
-			DWORD * info = (DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
-			if (*(DWORD**)info == nullptr)
-				continue;
-
-			gInited = true;
-
-			HandlingDefault::Initialize();
-			HandlingMgr::InitializeModelDefaults();
-
-			DebugPrint("Setting up SAMP Hooks");
-			if (!SetupSampHooks())
-				gInited = false;
-			DebugPrint("SAMP Initialized, host: %s", (char*)((*(DWORD*)info) + Addr.OFFSET_SampInfo_Hostname));
-			RegisterAllActionCallbacks();
-			//break; // TODO: Move this to some non-threaded equivalent, preferably some GTA hook
-		}
-		
-		Sleep(100);
-	}
-	ExitThread(EXIT_SUCCESS);
-	return 1;
-}
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
@@ -75,10 +18,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		case DLL_PROCESS_ATTACH:
 		{
 			DisableThreadLibraryCalls(hModule);
-
-			CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)waitForSamp, NULL, NULL, NULL);
-
-			SetupGtaHooks();
+			
+			StartHookingProcedure();
 #ifdef DEBUG
 			AllocConsole();
 			freopen("CONOUT$", "w", stdout);

@@ -21,8 +21,15 @@ public:
 			OFFSET_SampInfo_pPools = 0x3C5;
 			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
 			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
-			OFFSET_SampInfo_Hostname = 0x11D;
-			FUNC_IDFromGtaPtr = 0x1b180;
+			FUNC_IDFromGtaPtr = 0x1B180;
+			//FUNC_CVehiclePool_CreateVehicle = 0x1B670;
+			break;
+		case SAMP_037_R3:
+			OFFSET_SampInfo = 0x26E8DC;
+			OFFSET_SampInfo_pPools = 0x3DE;
+			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
+			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
+			FUNC_IDFromGtaPtr = 0x1E440;
 			//FUNC_CVehiclePool_CreateVehicle = 0x1B670;
 			break;
 		case SAMP_03DL: // R1
@@ -30,7 +37,6 @@ public:
 			OFFSET_SampInfo_pPools = 0x3DE;
 			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
 			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
-			OFFSET_SampInfo_Hostname = 0x131;
 			FUNC_IDFromGtaPtr = 0x1E650;
 			//FUNC_CVehiclePool_CreateVehicle = 0x1EB40;
 			break;

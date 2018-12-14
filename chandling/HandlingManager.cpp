@@ -24,7 +24,7 @@ namespace HandlingMgr
 		{
 			void* offs = GetHandlingAttribPtr(&this->rawHandling, mod.attrib);
 			/* write the value to the handling data so we can Get it later on */
-			DebugPrint("offset 0x%x rawHandl 0x%x attrib %d", (int)offs, (int)&this->rawHandling, (int)mod.attrib);
+			DebugPrint("addMod offset 0x%x rawHandl 0x%x attrib %d", (int)offs, (int)&this->rawHandling, (int)mod.attrib);
 			if (offs == nullptr)
 				return;
 			switch (mod.type)
@@ -119,7 +119,7 @@ namespace HandlingMgr
 		return vehicleHandlings[vehicleID].pCurrentHandling;
 	}
 
-	// if modelid = 0 then this function is applied to every model
+	// if modelid == 0 then this function is applied to every model
 	void InitializeModelDefaults(uint16_t modelid /* = 0 */)
 	{
 		if (modelid == 0)

@@ -5,11 +5,18 @@
 #include "hook_utils.h"
 #include "PacketEnum.h"
 #include "Actions.h"
+#include "ActionCallbacks.h"
 #include "HandlingDefault.h"
 #include "HandlingManager.h"
 
 #include <queue>
 #include <unordered_map>
+
+/** Hook Typedefs */
+typedef CVehicle*(__cdecl *tCreateCar)(DWORD model, CVector pos, BYTE mission); // CCarCtrlCreateCar
+typedef int(__thiscall *tSampIDFromGtaPtr)(DWORD* thisptr, int gtaptr); // SAMP's VehicleIDFromGtaPtr func
+typedef int(__thiscall *tSampCreateVehicle)(DWORD* thisptr, int vehiclesmth); // SAMP's CreateVehicle func
+typedef Packet*(__thiscall *tReceive)(RakClientInterface* thisptr);
 
 tCreateCar originalCCarCtrlCreateCar = nullptr;
 tSampCreateVehicle originalSampCreateVehicle = nullptr;
@@ -158,4 +165,81 @@ bool SetupSampHooks()
 		return true;
 	}
 	return false;
+}
+
+
+
+/* 
+	Hook Windows' PeekMessageA() which is used in GTA:SA
+	We can use this hook to check for samp.dll instead of creating a separate thread
+*/
+
+typedef BOOL(WINAPI *tPeekMessageA)(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg);
+tPeekMessageA originalPeekMessageA = nullptr;
+
+#define UNHOOK() DetourRemove((PBYTE)originalPeekMessageA, (PBYTE)hookPeekMessageA)
+
+BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg)
+{
+	static int startTime = GetTickCount();
+	BOOL result = originalPeekMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
+
+	if (!gInited && GetTickCount() - startTime >= 35 * 1000)
+	{
+		DebugPrint("SAMP Module not found, exiting...");
+		UNHOOK();
+		return result;
+	}
+
+	if (dwSampDLL == NULL && (dwSampDLL = (DWORD)GetModuleHandleA("samp.dll")) != NULL)
+	{
+		DebugPrint("SAMP Module loaded at 0x%x", (DWORD)dwSampDLL);
+	}
+	else if (!gInited)
+	{
+		if (gSampVer == SAMP_000)
+		{
+			if ((gSampVer = DetectSampVersion(dwSampDLL)) != SAMP_000)
+				Addr.Init(gSampVer);
+			else
+			{
+				DebugPrint("Unsupported SA:MP version, aborting...");
+				UNHOOK();
+				return result;
+			}
+		}
+
+		DWORD * info = (DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
+		if (*(DWORD**)info == nullptr)
+			return result;
+
+		gInited = true;
+
+		HandlingDefault::Initialize();
+		HandlingMgr::InitializeModelDefaults();
+
+		DebugPrint("Setting up SAMP Hooks");
+		if (!SetupSampHooks())
+		{
+			gInited = false;
+			UNHOOK();
+			return result;
+		}
+		else
+		{
+			// SAMP Hooking successful, now hook GTA functions
+			SetupGtaHooks();
+		}
+		DebugPrint("SAMP Initialized");
+		RegisterAllActionCallbacks();
+		
+		UNHOOK();
+	}
+	return result;
+}
+
+void StartHookingProcedure()
+{
+	originalPeekMessageA = PeekMessageA;
+	originalPeekMessageA = (tPeekMessageA)DetourFunction((PBYTE)originalPeekMessageA, (PBYTE)hookPeekMessageA);
 }

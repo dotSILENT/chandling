@@ -34,4 +34,5 @@ extern CAddresses Addr;
 extern bool gInited;
 extern DWORD dwSampDLL;
 extern CVehicle** pID2PTR;
+extern eSampVersion gSampVer;
 
