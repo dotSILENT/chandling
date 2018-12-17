@@ -93,11 +93,27 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmt
 
 static bool bWelcomeSent = false;
 static bool bSendWelcome = false;
+
+typedef int(__thiscall *tConnect)(RakClientInterface* thisptr, char* hostname, int port, uint16_t hostshort, int a5, int a6);
+tConnect originalConnect = nullptr;
+
+/* hook RakClient's Connect() for re-setting data */
+int __fastcall hookedConnect(RakClientInterface* thisptr, DWORD EDX, char* hostname, int port, uint16_t hostshort, int a5, int a6)
+{
+	DebugPrint("Connect(%s, %d, %d, %d, %d)", hostname, port, hostshort, a5, a6);
+	// Re-send the init packet
+	bWelcomeSent = false;
+	bSendWelcome = false;
+	// Reset stuff to defaults
+	HandlingMgr::InitializeModelDefaults();
+	return originalConnect(thisptr, hostname, port, hostshort, a5, a6);
+}
+
 Packet* __fastcall hookedReceive(RakClientInterface* thisptr)
 {
 	Packet* pkt = originalReceive(thisptr);
 	
-	if (bSendWelcome)
+	if (bSendWelcome && thisptr->IsConnected())
 	{
 		bSendWelcome = false;
 		bWelcomeSent = true;
@@ -161,6 +177,7 @@ bool SetupSampHooks()
 		if (!dwSampCrtVeh)
 			return false;
 		originalSampCreateVehicle = (tSampCreateVehicle)DetourFunction((PBYTE)dwSampCrtVeh, (PBYTE)hookedSampCreateVehicle);
+		originalConnect = (tConnect)DetourFunction((PBYTE)FindPattern(dwSampDLL, "\x53\x55\x56\x57\x8B\xF9\x6A\x00\x8D\x9F\x00\x00\x00\x00\x6A\x64", "xxxxxxxxxx????xx"), (PBYTE)hookedConnect);
 		originalReceive = (tReceive)DetourFunction((PBYTE)(FindPattern(dwSampDLL, "\x6A\x04\x8B\xCE\xC7\x44\x24\x00\x00\x00\x00\x00", "xxxxxxx?????") - 60), (PBYTE)hookedReceive);
 		return true;
 	}
