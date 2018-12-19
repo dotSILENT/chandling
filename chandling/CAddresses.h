@@ -20,7 +20,7 @@ public:
 			OFFSET_SampInfo = 0x21A100;
 			OFFSET_SampInfo_pPools = 0x3C5;
 			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
-			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
+			OFFSET_VehiclePool_pGtaVehicles = 0x4FB4;
 			FUNC_IDFromGtaPtr = 0x1B180;
 			//FUNC_CVehiclePool_CreateVehicle = 0x1B670;
 			break;
@@ -28,7 +28,7 @@ public:
 			OFFSET_SampInfo = 0x26E8DC;
 			OFFSET_SampInfo_pPools = 0x3DE;
 			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
-			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
+			OFFSET_VehiclePool_pGtaVehicles = 0x4FB4;
 			FUNC_IDFromGtaPtr = 0x1E440;
 			//FUNC_CVehiclePool_CreateVehicle = 0x1B670;
 			break;
@@ -36,7 +36,7 @@ public:
 			OFFSET_SampInfo = 0x2ACA24;
 			OFFSET_SampInfo_pPools = 0x3DE;
 			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
-			OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0x4FB4;
+			OFFSET_VehiclePool_pGtaVehicles = 0x4FB4;
 			FUNC_IDFromGtaPtr = 0x1E650;
 			//FUNC_CVehiclePool_CreateVehicle = 0x1EB40;
 			break;
@@ -46,8 +46,7 @@ public:
 	DWORD	OFFSET_SampInfo = 0;
 	DWORD	OFFSET_SampInfo_pPools = 0;
 	DWORD	OFFSET_SampInfo_pPools_pVehiclePool = 0;
-	DWORD	OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles = 0;
-	DWORD	OFFSET_SampInfo_Hostname = 0; // not really needed, can be removed before the final release
+	DWORD	OFFSET_VehiclePool_pGtaVehicles = 0;
 
 	DWORD	FUNC_IDFromGtaPtr = 0; // can be found by searching for 'Stay within the ~r~world boundaries'
 	//DWORD	FUNC_CVehiclePool_CreateVehicle = 0; // FindPattern finds it for us, but it can be found by searching for 'vehicle %u was not deleted'

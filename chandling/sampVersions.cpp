@@ -3,7 +3,8 @@
 
 eSampVersion DetectSampVersion(DWORD dwSAMP)
 {
-	switch(*(BYTE*)(dwSAMP + 0x1036))
+	BYTE bVer = *(BYTE*)(dwSAMP + 0x1036);
+	switch(bVer)
 	{
 	case 0xA8:
 		DebugPrint("Detected SAMP version 0.3.7 R2");
@@ -18,6 +19,7 @@ eSampVersion DetectSampVersion(DWORD dwSAMP)
 		return SAMP_03DL;
 	}
 	
-	DebugPrint("Couldn't detect SAMP version (version byte: 0x%x)", *(BYTE*)(dwSAMP + 0x1036));
+	DebugPrint("Couldn't detect SAMP version (version byte: 0x%x)", bVer);
+	LogError("Couldn't detect SAMP version (version byte: 0x%x)", bVer);
 	return SAMP_000;
 }

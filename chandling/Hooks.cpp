@@ -80,11 +80,18 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmt
 
 		struct tHandlingData* pHandl = HandlingMgr::GetHandlingPtrForVehicle(id, ptr->m_nModelID);
 
-		if (pHandl == nullptr || pHandl->m_iIndex != ptr->m_pHandlingData->m_iIndex)
+		if (pHandl == nullptr)
 		{
 			DebugPrint("Invalid handling pointer, id %d model %d", id, ptr->m_nModelID);
+			LogError("Invalid handling pointer returned for vehicle ID %d (model %d)", id, ptr->m_nModelID);
 			return ret;
 		}
+		else if (pHandl->m_iIndex != ptr->m_pHandlingData->m_iIndex)
+		{
+			DebugPrint("Handling index mismatch for vehicle ID %d (model %d, index %d != %d)", id, ptr->m_nModelID, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex);
+			LogError("Handling index mismatch for vehicle ID %d (model %d, index %d != %d)", id, ptr->m_nModelID, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex);
+		}
+
 		DebugPrint("pHandl 0x%x index %d=%d dragmult %f=%f", (int)pHandl, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
 		ptr->m_pHandlingData = pHandl;
 	}
@@ -160,25 +167,51 @@ bool SetupSampHooks()
 	{
 		dwSampInfo = *(DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
 		if ((PDWORD)dwSampInfo == nullptr)
+		{
+			LogError("Couldn't get OFFSET_SampInfo (0x%x)", Addr.OFFSET_SampInfo);
 			return false;
+		}
 		DebugPrint("dwSampInfo 0x%x @ 0x%x", dwSampInfo, (dwSampDLL + Addr.OFFSET_SampInfo));
 		dwSampPools = *(DWORD*)(dwSampInfo + Addr.OFFSET_SampInfo_pPools);
 		if ((PDWORD)dwSampPools == nullptr)
+		{
+			LogError("Couldn't get OFFSET_SampInfo_pPools (0x%x)", Addr.OFFSET_SampInfo_pPools);
 			return false;
+		}
 		DebugPrint("dwSampPools 0x%x", dwSampPools);
 		dwSampVehPool = *(DWORD*)(dwSampPools + Addr.OFFSET_SampInfo_pPools_pVehiclePool);
 		if ((PDWORD)dwSampVehPool == nullptr)
+		{
+			LogError("Couldn't get OFFSET_SampInfo_pPools_pVehiclePool (0x%x)", Addr.OFFSET_SampInfo_pPools_pVehiclePool);
 			return false;
+		}
 		DebugPrint("dwSampVehPool 0x%x", dwSampVehPool);
 
-		pID2PTR = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_SampInfo_pPools_pVehiclePool_pGtaVehicles));
+		pID2PTR = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_VehiclePool_pGtaVehicles));
 		SampIDFromGtaPtr = (tSampIDFromGtaPtr)(dwSampDLL + Addr.FUNC_IDFromGtaPtr);
-		DWORD dwSampCrtVeh = FindPattern(dwSampDLL, "\x56\x8B\x74\x24\x08\x0F\xB7\x06\x57\x8B\xF9", "xxxxxxxxxxx");
-		if (!dwSampCrtVeh)
+		DWORD dwAddr = FindPattern(dwSampDLL, "\x56\x8B\x74\x24\x08\x0F\xB7\x06\x57\x8B\xF9", "xxxxxxxxxxx"); // SampCreateVehicle
+		if (!dwAddr)
+		{
+			LogError("Couldn't find SampCreateVehicle");
 			return false;
-		originalSampCreateVehicle = (tSampCreateVehicle)DetourFunction((PBYTE)dwSampCrtVeh, (PBYTE)hookedSampCreateVehicle);
-		originalConnect = (tConnect)DetourFunction((PBYTE)FindPattern(dwSampDLL, "\x53\x55\x56\x57\x8B\xF9\x6A\x00\x8D\x9F\x00\x00\x00\x00\x6A\x64", "xxxxxxxxxx????xx"), (PBYTE)hookedConnect);
-		originalReceive = (tReceive)DetourFunction((PBYTE)(FindPattern(dwSampDLL, "\x6A\x04\x8B\xCE\xC7\x44\x24\x00\x00\x00\x00\x00", "xxxxxxx?????") - 60), (PBYTE)hookedReceive);
+		}
+		originalSampCreateVehicle = (tSampCreateVehicle)DetourFunction((PBYTE)dwAddr, (PBYTE)hookedSampCreateVehicle);
+
+		dwAddr = FindPattern(dwSampDLL, "\x53\x55\x56\x57\x8B\xF9\x6A\x00\x8D\x9F\x00\x00\x00\x00\x6A\x64", "xxxxxxxxxx????xx"); // RakClient->Connect()
+		if (!dwAddr)
+		{
+			LogError("Couldn't find RakClient()->Connect()");
+			return false;
+		}
+		originalConnect = (tConnect)DetourFunction((PBYTE)dwAddr, (PBYTE)hookedConnect);
+
+		dwAddr = FindPattern(dwSampDLL, "\x6A\x04\x8B\xCE\xC7\x44\x24\x00\x00\x00\x00\x00", "xxxxxxx?????") - 60; // RakClient->Receive()
+		if (!dwAddr)
+		{
+			LogError("Couldn't find RakClient->Receive()");
+			return false;
+		}
+		originalReceive = (tReceive)DetourFunction((PBYTE)dwAddr, (PBYTE)hookedReceive);
 		return true;
 	}
 	return false;

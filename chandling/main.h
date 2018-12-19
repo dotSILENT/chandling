@@ -5,6 +5,8 @@
 #include <cstdio>
 #include "game/game.h"
 
+#define CHANDLING_ERROR_LOG "chandling_errors.log"
+
 #define DEBUG
 
 /* Uncomment this to save all the handlings from handling.cfg (mapped to their models) to a file */
@@ -15,6 +17,8 @@
 #else 
 #define DebugPrint(...)
 #endif
+
+void LogError(const char *fmt, ...);
 
 #define MAX_VEHICLES (2000)
 #define MAX_VEHICLE_MODELS (212)
