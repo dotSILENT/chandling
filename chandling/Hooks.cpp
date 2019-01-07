@@ -1,7 +1,11 @@
 #include "Hooks.h"
+#include "main.h"
+#include "raknet/RakClientInterface.h"
+#include "game/game.h"
+
 #include "detours.h"
 #pragma comment(lib, "detours.lib")
-#include "raknet\RakClientInterface.h"
+
 #include "hook_utils.h"
 #include "PacketEnum.h"
 #include "Actions.h"

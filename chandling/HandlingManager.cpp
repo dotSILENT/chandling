@@ -14,6 +14,7 @@ namespace HandlingMgr
 	private:
 		bool calculated = false;
 		uint8_t modsCount = 0;
+
 		void RestoreUncalculated() // this restores the uncalculated handling & allows us to calculate it again
 		{
 			memcpy(&calcHandling, &rawHandling, sizeof(struct tHandlingData));
@@ -163,7 +164,7 @@ namespace HandlingMgr
 			CVehicle* ptr = pID2PTR[vehicleID];
 			if (ptr != nullptr)
 			{
-				DebugPrint("ApplyVehicleMods live change on ptr 0x%x", (int)ptr);
+				DebugPrint("ApplyVehicleMods live change on ptr 0x%x (vehicle id %d)", (int)ptr, vehicleID);
 				ptr->m_pHandlingData = vehicleHandlings[vehicleID].pCurrentHandling;
 			}
 		}

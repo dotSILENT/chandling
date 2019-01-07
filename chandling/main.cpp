@@ -1,5 +1,3 @@
-#define PRINT_DEFAULT_HANDLING
-
 #include "main.h"
 #include "sampVersions.h"
 #include "Hooks.h"
