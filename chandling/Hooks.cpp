@@ -16,21 +16,245 @@
 #include <queue>
 #include <unordered_map>
 
+const char szModelHandlingNames[MAX_VEHICLE_MODELS][12] =
+{
+	{ "LANDSTAL" },
+	{ "BRAVURA" },
+	{ "BUFFALO" },
+	{ "LINERUN" },
+	{ "PEREN" },
+	{ "SENTINEL" },
+	{ "DUMPER" },
+	{ "FIRETRUK" },
+	{ "TRASH" },
+	{ "STRETCH" },
+	{ "MANANA" },
+	{ "INFERNUS" },
+	{ "VOODOO" },
+	{ "PONY" },
+	{ "MULE" },
+	{ "CHEETAH" },
+	{ "AMBULAN" },
+	{ "LEVIATHN" },
+	{ "MOONBEAM" },
+	{ "ESPERANT" },
+	{ "TAXI" },
+	{ "WASHING" },
+	{ "BOBCAT" },
+	{ "MRWHOOP" },
+	{ "BFINJECT" },
+	{ "HUNTER" },
+	{ "PREMIER" },
+	{ "ENFORCER" },
+	{ "SECURICA" },
+	{ "BANSHEE" },
+	{ "PREDATOR" },
+	{ "BUS" },
+	{ "RHINO" },
+	{ "BARRACKS" },
+	{ "HOTKNIFE" },
+	{ "ARTICT1" },
+	{ "PREVION" },
+	{ "COACH" },
+	{ "CABBIE" },
+	{ "STALLION" },
+	{ "RUMPO" },
+	{ "RCBANDIT" },
+	{ "ROMERO" },
+	{ "PACKER" },
+	{ "MONSTER" },
+	{ "ADMIRAL" },
+	{ "SQUALO" },
+	{ "SEASPAR" },
+	{ "MOPED" },
+	{ "TRAM" },
+	{ "ARTICT2" },
+	{ "TURISMO" },
+	{ "SPEEDER" },
+	{ "REEFER" },
+	{ "TROPIC" },
+	{ "FLATBED" },
+	{ "YANKEE" },
+	{ "GOLFCART" },
+	{ "SOLAIR" },
+	{ "TOPFUN" },
+	{ "SEAPLANE" },
+	{ "BIKE" },
+	{ "MOPED" },
+	{ "FREEWAY" },
+	{ "RCBARON" },
+	{ "RCRAIDER" },
+	{ "GLENDALE" },
+	{ "OCEANIC" },
+	{ "DIRTBIKE" },
+	{ "SPARROW" },
+	{ "PATRIOT" },
+	{ "QUADBIKE" },
+	{ "COASTGRD" },
+	{ "DINGHY" },
+	{ "HERMES" },
+	{ "SABRE" },
+	{ "RUSTLER" },
+	{ "ZR350" },
+	{ "WALTON" },
+	{ "REGINA" },
+	{ "COMET" },
+	{ "BMX" },
+	{ "BURRITO" },
+	{ "CAMPER" },
+	{ "MARQUIS" },
+	{ "BAGGAGE" },
+	{ "DOZER" },
+	{ "MAVERICK" },
+	{ "COASTMAV" },
+	{ "RANCHER" },
+	{ "FBIRANCH" },
+	{ "VIRGO" },
+	{ "GREENWOO" },
+	{ "CUPBOAT" },
+	{ "HOTRING" },
+	{ "SANDKING" },
+	{ "BLISTAC" },
+	{ "POLMAV" },
+	{ "BOXVILLE" },
+	{ "BENSON" },
+	{ "MESA" },
+	{ "RCGOBLIN" },
+	{ "HOTRING" },
+	{ "HOTRING" },
+	{ "BLOODRA" },
+	{ "RANCHER" },
+	{ "SUPERGT" },
+	{ "ELEGANT" },
+	{ "JOURNEY" },
+	{ "CHOPPERB" },
+	{ "MTB" },
+	{ "BEAGLE" },
+	{ "CROPDUST" },
+	{ "STUNT" },
+	{ "PETROL" },
+	{ "RDTRAIN" },
+	{ "NEBULA" },
+	{ "MAJESTIC" },
+	{ "BUCCANEE" },
+	{ "SHAMAL" },
+	{ "HYDRA" },
+	{ "FCR900" },
+	{ "NRG500" },
+	{ "HPV1000" },
+	{ "CEMENT" },
+	{ "TOWTRUCK" },
+	{ "FORTUNE" },
+	{ "CADRONA" },
+	{ "FBITRUCK" },
+	{ "WILLARD" },
+	{ "FORKLIFT" },
+	{ "TRACTOR" },
+	{ "COMBINE" },
+	{ "FELTZER" },
+	{ "REMINGTN" },
+	{ "SLAMVAN" },
+	{ "BLADE" },
+	{ "FREIGHT" },
+	{ "STREAK" },
+	{ "VORTEX" },
+	{ "VINCENT" },
+	{ "BULLET" },
+	{ "CLOVER" },
+	{ "SADLER" },
+	{ "FIRETRUK" },
+	{ "HUSTLER" },
+	{ "INTRUDER" },
+	{ "PRIMO" },
+	{ "CARGOBOB" },
+	{ "TAMPA" },
+	{ "SUNRISE" },
+	{ "MERIT" },
+	{ "UTILITY" },
+	{ "NEVADA" },
+	{ "YOSEMITE" },
+	{ "WINDSOR" },
+	{ "MTRUCK_A" },
+	{ "MTRUCK_B" },
+	{ "URANUS" },
+	{ "JESTER" },
+	{ "SULTAN" },
+	{ "STRATUM" },
+	{ "ELEGY" },
+	{ "RAINDANC" },
+	{ "RCTIGER" },
+	{ "FLASH" },
+	{ "TAHOMA" },
+	{ "SAVANNA" },
+	{ "BANDITO" },
+	{ "FREIFLAT" },
+	{ "CSTREAK" },
+	{ "KART" },
+	{ "MOWER" },
+	{ "DUNE" },
+	{ "SWEEPER" },
+	{ "BROADWAY" },
+	{ "TORNADO" },
+	{ "AT400" },
+	{ "DFT30" },
+	{ "HUNTLEY" },
+	{ "STAFFORD" },
+	{ "BF400" },
+	{ "NEWSVAN" },
+	{ "TUG" },
+	{ "PETROTR" },
+	{ "EMPEROR" },
+	{ "WAYFARER" },
+	{ "EUROS" },
+	{ "HOTDOG" },
+	{ "CLUB" },
+	{ "FREIFLAT" },
+	{ "ARTICT3" },
+	{ "ANDROM" },
+	{ "DODO" },
+	{ "RCCAM" },
+	{ "LAUNCH" },
+	{ "POLICE_LA" },
+	{ "POLICE_SF" },
+	{ "POLICE_VG" },
+	{ "POLRANGER" },
+	{ "PICADOR" },
+	{ "SWATVAN" },
+	{ "ALPHA" },
+	{ "PHOENIX" },
+	{ "GLENDALE" },
+	{ "SADLER" },
+	{ "BAGBOXA" },
+	{ "BAGBOXB" },
+	{ "STAIRS" },
+	{ "BOXBURG" },
+	{ "FARM_TR1" },
+	{ "UTIL_TR1" }
+};
+
+#pragma pack(push, 1)
+struct stVehicleCreationInfo
+{
+	WORD id;
+	WORD model;
+	float x;
+	float y;
+	float z;
+	float angle;
+};
+#pragma pack(pop)
+struct stVehicleCreationInfo *pCreatedVehicleInfo = nullptr; // used for swapping handling data before the actual vehicle creation (hookedCCarCtrlCreateCar)
+
 /** Hook Typedefs */
 typedef CVehicle*(__cdecl *tCreateCar)(DWORD model, CVector pos, BYTE mission); // CCarCtrlCreateCar
-typedef int(__thiscall *tSampIDFromGtaPtr)(DWORD* thisptr, int gtaptr); // SAMP's VehicleIDFromGtaPtr func
-typedef int(__thiscall *tSampCreateVehicle)(DWORD* thisptr, int vehiclesmth); // SAMP's CreateVehicle func
+//typedef int(__thiscall *tSampIDFromGtaPtr)(DWORD* thisptr, int gtaptr); // SAMP's VehicleIDFromGtaPtr func
+typedef int(__thiscall *tSampCreateVehicle)(DWORD* thisptr, struct stVehicleCreationInfo &vehinfo); // SAMP's CreateVehicle func
 typedef Packet*(__thiscall *tReceive)(RakClientInterface* thisptr);
 
 tCreateCar originalCCarCtrlCreateCar = nullptr;
+//tSampIDFromGtaPtr SampIDFromGtaPtr = nullptr; // Get samp ID from gta struct pointer
 tSampCreateVehicle originalSampCreateVehicle = nullptr;
-
 tReceive originalReceive = nullptr;
-
-tSampIDFromGtaPtr SampIDFromGtaPtr = nullptr; // Get samp ID from gta struct pointer
-
-// Queue used for getting samp ID from pointer, as we can't do it straight away
-std::queue<CVehicle*> qCreatedVehiclePtrs;
 
 // They aren't actual pointers but the addresses that real pointers point to are kept as values
 DWORD dwSampInfo = NULL;
@@ -39,19 +263,49 @@ DWORD dwSampVehPool = NULL;
 
 RakClientInterface* pRakClientInterface = nullptr;
 
+
 /*
 	This GTA func is used to create vehicles (excluding trains) for scripts, SAMP uses it to create vehicles
 	It's called everytime a vehicle streams in, giving us it's direct CVehicle pointer
-	but in order to find out what's the SAMP ID of this vehicle, we need to check it later
-	using SampIDFromGtaPtr, because at this point there is no ID assigned to it.
 */
+
+typedef int(__thiscall *t_GetHandlingId)(void* thisptr, const char *vehname);
+
 CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMission)
 {
+	/*	
+		Overwrite the default handling values now so the vehicle copies them during creation
+		 bring back the original ones right after
+	*/
+	struct tHandlingData orgHandling;
+	struct tHandlingData *pGtaHandling = nullptr;
+	int handlingIndex = -1;
+	bool swapped = false;
+
+	if (gInited && pCreatedVehicleInfo != nullptr && model == pCreatedVehicleInfo->model && IS_VALID_VEHICLE_MODEL(pCreatedVehicleInfo->model))
+	{
+		handlingIndex = ((t_GetHandlingId)0x6F4FD0)(0x0, szModelHandlingNames[VEHICLE_MODEL_INDEX(model)]);
+		struct tHandlingData* pCustomHandling = HandlingMgr::GetHandlingPtrForVehicle(pCreatedVehicleInfo->id, model);
+
+		if (handlingIndex >= 0  && handlingIndex < 210 && pCustomHandling != nullptr) // t_GetHandlingId returns 210 for invalid model names
+		{
+			pGtaHandling = (struct tHandlingData*)(0xC2B9DC + (handlingIndex * sizeof(struct tHandlingData)));
+			//DebugPrint("swapping handling (index %d) for vehicleid %d, pCustomHandl 0x%x", handlingIndex, pCreatedVehicleInfo->id, (int)pCustomHandling);
+			memcpy(&orgHandling, pGtaHandling, sizeof(struct tHandlingData));
+			memcpy(pGtaHandling, pCustomHandling, sizeof(struct tHandlingData));
+			swapped = true;
+		}
+	}
+
 	CVehicle* ptr = originalCCarCtrlCreateCar(model, pos, isMission);
 	if (!gInited)
 		return ptr;
-	//DebugPrint("Created vehicle ptr[0x%x] model %d at %f %f %f", (int)ptr, model, pos.fX, pos.fY, pos.fZ);
-	qCreatedVehiclePtrs.push(ptr);
+
+	// Swap back the original handling
+	if (swapped)
+		memcpy(pGtaHandling, &orgHandling, sizeof(struct tHandlingData));
+
+	DebugPrint("Created vehicle ptr[0x%x] model %d at %f %f %f", (int)ptr, model, pos.fX, pos.fY, pos.fZ);
 	return ptr;
 }
 
@@ -62,43 +316,41 @@ CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMissi
  * This is where we apply custom handlings to newly created vehicles
  */
 
-int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, int vehiclesmth)
+int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, struct stVehicleCreationInfo &vehinfo)
 {
-	int ret = originalSampCreateVehicle(thisptr, vehiclesmth);
+	// FIX!! VEHICLEID IS NOT VEHICLEID ITS A POINTER TO VEHICLE CREATION STRUCT
+	pCreatedVehicleInfo = &vehinfo;
+	int ret = originalSampCreateVehicle(thisptr, vehinfo);
+	pCreatedVehicleInfo = nullptr;
 	if (!gInited)
 		return ret;
 	// original func calls CCarCtrl::CreateCar.. so now we should have a pointer to the created vehicle stored in qCreatedVehiclePtrs
 
-	while (!qCreatedVehiclePtrs.empty())
+	//int id = SampIDFromGtaPtr((DWORD*)dwSampVehPool, (int)ptr);
+	CVehicle* ptr = pID2PTR[vehinfo.id]; //qCreatedVehiclePtrs.front();
+	if (!ptr)
+		return ret;
+
+	DebugPrint("CreateVehicle id %d model %d pointer 0x%x", vehinfo.id, vehinfo.model, (int)ptr);
+	//DebugPrint("vehpool 0x%x pools 0x%x ptrFromId 0x%x", (int)dwSampVehPool, (int)dwSampPools, (int)pID2PTR[id]);
+
+	HandlingMgr::InitVehicle(vehinfo.id, vehinfo.model);
+
+	struct tHandlingData* pHandl = HandlingMgr::GetHandlingPtrForVehicle(vehinfo.id, vehinfo.model);
+
+	if (pHandl == nullptr)
 	{
-		CVehicle* ptr = qCreatedVehiclePtrs.front();
-
-		int id = SampIDFromGtaPtr((DWORD*)dwSampVehPool, (int)ptr);
-		DebugPrint("SAMP ID FROM 0x%x -> %d", (int)ptr, id);
-
-		DebugPrint("vehpool 0x%x pools 0x%x ptrFromId 0x%x", (int)dwSampVehPool, (int)dwSampPools, (int)pID2PTR[id]);
-
-		qCreatedVehiclePtrs.pop();
-
-		HandlingMgr::InitVehicle(id, ptr->m_nModelID);
-
-		struct tHandlingData* pHandl = HandlingMgr::GetHandlingPtrForVehicle(id, ptr->m_nModelID);
-
-		if (pHandl == nullptr)
-		{
-			DebugPrint("Invalid handling pointer, id %d model %d", id, ptr->m_nModelID);
-			LogError("Invalid handling pointer returned for vehicle ID %d (model %d)", id, ptr->m_nModelID);
-			return ret;
-		}
-		else if (pHandl->m_iIndex != ptr->m_pHandlingData->m_iIndex)
-		{
-			DebugPrint("Handling index mismatch for vehicle ID %d (model %d, index %d != %d)", id, ptr->m_nModelID, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex);
-			LogError("Handling index mismatch for vehicle ID %d (model %d, index %d != %d)", id, ptr->m_nModelID, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex);
-		}
-
-		DebugPrint("pHandl 0x%x index %d=%d dragmult %f=%f", (int)pHandl, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
-		ptr->m_pHandlingData = pHandl;
+		DebugPrint("Invalid handling pointer, id %d model %d = %d", vehinfo.id, vehinfo.model, ptr->m_nModelID);
+		LogError("Invalid handling pointer returned for vehicle ID %d (model %d = %d)", vehinfo.id, vehinfo.model, ptr->m_nModelID);
+		return ret;
 	}
+	else if (pHandl->m_iIndex != ptr->m_pHandlingData->m_iIndex)
+	{
+		DebugPrint("Handling index mismatch for vehicle ID %d (model %d, index %d != %d)", vehinfo.id, ptr->m_nModelID, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex);
+		LogError("Handling index mismatch for vehicle ID %d (model %d, index %d != %d)", vehinfo.id, ptr->m_nModelID, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex);
+	}
+
+	DebugPrint("pHandl 0x%x index %d=%d dragmult %f=%f", (int)pHandl, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
 	return ret;
 }
 
@@ -165,6 +417,7 @@ void SetupGtaHooks()
 #endif
 }
 
+
 bool SetupSampHooks()
 {
 	if (gInited)
@@ -192,7 +445,7 @@ bool SetupSampHooks()
 		DebugPrint("dwSampVehPool 0x%x", dwSampVehPool);
 
 		pID2PTR = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_VehiclePool_pGtaVehicles));
-		SampIDFromGtaPtr = (tSampIDFromGtaPtr)(dwSampDLL + Addr.FUNC_IDFromGtaPtr);
+		//SampIDFromGtaPtr = (tSampIDFromGtaPtr)(dwSampDLL + Addr.FUNC_IDFromGtaPtr);
 		DWORD dwAddr = FindPattern(dwSampDLL, "\x56\x8B\x74\x24\x08\x0F\xB7\x06\x57\x8B\xF9", "xxxxxxxxxxx"); // SampCreateVehicle
 		if (!dwAddr)
 		{

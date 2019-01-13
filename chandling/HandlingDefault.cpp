@@ -10206,7 +10206,7 @@ struct stModelHandlingID
 };
 
 /* An array used for re-arranging the order of handling lines to match their vehicle models */
-const struct stModelHandlingID modelTranslationTable[MAX_MODELS] =
+const struct stModelHandlingID modelTranslationTable[MAX_VEHICLE_MODELS] =
 {
 	{ 400,	"LANDSTAL" },
 	{ 401, 	"BRAVURA" },
@@ -10425,7 +10425,7 @@ const struct stModelHandlingID modelTranslationTable[MAX_MODELS] =
 namespace HandlingDefault
 {
 
-	struct tHandlingData modelHandlings[MAX_MODELS];
+	struct tHandlingData modelHandlings[MAX_VEHICLE_MODELS];
 
 	t_ConvertHandlingToGameUnits originalLoadHandling = nullptr;
 
@@ -10436,7 +10436,7 @@ namespace HandlingDefault
 		// find the model id (note that some models use the same handling twice)
 		bool found = false;
 
-		for (int i = 0; i < MAX_MODELS; i++)
+		for (int i = 0; i < MAX_VEHICLE_MODELS; i++)
 		{
 			if (((t_GetHandlingId)0x6F4FD0)(thisptr, modelTranslationTable[i].handlingID) == handling->m_iIndex)
 			{
@@ -10461,7 +10461,7 @@ namespace HandlingDefault
 				if (f)
 				{
 					struct tHandlingData* hn = nullptr;
-					for (int i = 0; i < MAX_MODELS; i++)
+					for (int i = 0; i < MAX_VEHICLE_MODELS; i++)
 					{
 						hn = &modelHandlings[i];
 

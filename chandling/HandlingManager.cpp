@@ -120,6 +120,13 @@ namespace HandlingMgr
 		return vehicleHandlings[vehicleID].pCurrentHandling;
 	}
 
+	tHandlingData* GetHandlingPtrForModel(int modelID)
+	{
+		if (!IS_VALID_VEHICLE_MODEL(modelID))
+			return nullptr;
+		return &modelHandlings[VEHICLE_MODEL_INDEX(modelID)].rawHandling;
+	}
+
 	// if modelid == 0 then this function is applied to every model
 	void InitializeModelDefaults(uint16_t modelid /* = 0 */)
 	{

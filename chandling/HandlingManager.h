@@ -19,6 +19,7 @@ namespace HandlingMgr
 	bool	InitVehicle(int vehicleID, int model, bool ignoreModel = false); // this needs to be called each time a vehicle is created in game, before GetHandlingPtrForVehicle
 
 	tHandlingData*	GetHandlingPtrForVehicle(int vehicleID, int model);
+	tHandlingData*	GetHandlingPtrForModel(int modelID);
 
 	void	InitializeModelDefaults(uint16_t modelid = 0); // this needs to be called first
 
