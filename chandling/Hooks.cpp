@@ -12,6 +12,9 @@
 #include "ActionCallbacks.h"
 #include "HandlingDefault.h"
 #include "HandlingManager.h"
+#include "CAddresses.h"
+
+CAddresses Addr;
 
 #include <queue>
 #include <unordered_map>
@@ -340,14 +343,13 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, struct stVehic
 
 	if (pHandl == nullptr)
 	{
-		DebugPrint("Invalid handling pointer, id %d model %d = %d", vehinfo.id, vehinfo.model, ptr->m_nModelID);
 		LogError("Invalid handling pointer returned for vehicle ID %d (model %d = %d)", vehinfo.id, vehinfo.model, ptr->m_nModelID);
 		return ret;
 	}
 	else if (pHandl->m_iIndex != ptr->m_pHandlingData->m_iIndex)
 	{
-		DebugPrint("Handling index mismatch for vehicle ID %d (model %d, index %d != %d)", vehinfo.id, ptr->m_nModelID, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex);
 		LogError("Handling index mismatch for vehicle ID %d (model %d, index %d != %d)", vehinfo.id, ptr->m_nModelID, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex);
+		return ret;
 	}
 
 	DebugPrint("pHandl 0x%x index %d=%d dragmult %f=%f", (int)pHandl, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
@@ -504,16 +506,11 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 	}
 	else if (!gInited)
 	{
-		if (gSampVer == SAMP_000)
+		if (!Addr.isLoaded() && !Addr.detectVersionAndLoadOffsets(dwSampDLL))
 		{
-			if ((gSampVer = DetectSampVersion(dwSampDLL)) != SAMP_000)
-				Addr.Init(gSampVer);
-			else
-			{
-				DebugPrint("Unsupported SA:MP version, aborting...");
-				UNHOOK();
-				return result;
-			}
+			LogError("Couldn't detect version or load the offsets file, aborting...");
+			UNHOOK();
+			return result;
 		}
 
 		DWORD * info = (DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);

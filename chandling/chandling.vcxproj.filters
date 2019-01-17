@@ -24,16 +24,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CAddresses.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="Hooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HandlingManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sampVersions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="raknet\BitStream.cpp">
@@ -54,9 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sampVersions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\CSomeClassess.h">
@@ -99,6 +90,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HandlingDefault.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleIni.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CAddresses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

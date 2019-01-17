@@ -1,11 +1,8 @@
 #include "main.h"
-#include "sampVersions.h"
 #include "Hooks.h"
 
 // globals
 DWORD dwSampDLL = NULL;
-eSampVersion gSampVer = SAMP_000;
-CAddresses Addr;
 bool gInited = false;
 CVehicle** pID2PTR = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct CVehicle class pointer
 
@@ -49,6 +46,12 @@ void LogError(const char *fmt, ...)
 	fprintf(g_fLog, "[%02d:%02d:%02d.%03d] ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 	va_start(ap, fmt);
 	vfprintf(g_fLog, fmt, ap);
+	// implementation of DebugPrint() macro
+#ifdef DEBUG
+	printf("[cHandling] ERROR! ");
+	vprintf(fmt, ap);
+	printf("\n");
+#endif
 	va_end(ap);
 	fprintf(g_fLog, "\n");
 	fflush(g_fLog);

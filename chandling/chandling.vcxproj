@@ -152,18 +152,17 @@
   <ItemGroup>
     <ClCompile Include="ActionCallbacks.cpp" />
     <ClCompile Include="Actions.cpp" />
-    <ClCompile Include="CAddresses.h" />
     <ClCompile Include="HandlingDefault.cpp" />
     <ClCompile Include="HandlingEnum.cpp" />
     <ClCompile Include="HandlingManager.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="raknet\BitStream.cpp" />
-    <ClCompile Include="sampVersions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionCallbacks.h" />
     <ClInclude Include="Actions.h" />
+    <ClInclude Include="CAddresses.h" />
     <ClInclude Include="HandlingDefault.h" />
     <ClInclude Include="HandlingEnum.h" />
     <ClInclude Include="HandlingManager.h" />
@@ -177,7 +176,7 @@
     <ClInclude Include="PacketEnum.h" />
     <ClInclude Include="raknet\BitStream.h" />
     <ClInclude Include="raknet\RakClientInterface.h" />
-    <ClInclude Include="sampVersions.h" />
+    <ClInclude Include="SimpleIni.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="detours.lib" />

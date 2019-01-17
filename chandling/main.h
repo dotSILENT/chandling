@@ -1,5 +1,6 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
+#define _WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <stdarg.h>
 #include <cstdio>
@@ -33,10 +34,7 @@ void LogError(const char *fmt, ...);
 	(modelid - 400)
 
 
-#include "CAddresses.h"
-extern CAddresses Addr;
 extern bool gInited;
 extern DWORD dwSampDLL;
 extern CVehicle** pID2PTR;
-extern eSampVersion gSampVer;
 

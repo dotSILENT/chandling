@@ -1,46 +1,80 @@
 #pragma once
-#include "sampVersions.h"
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include "SimpleIni.h"
 
 // GTA SA func
 #define FUNC_CCarCtrl_CreateCarForScript 0x431f80
 
+#define CHANDLING_OFFSETS_FILE "chandling_offsets.ini"
+
 /*
-	I don't use statics for this because it's a pain in the ass (they need to be initialized to be resolved)
-	Just don't change any values on runtime as they should all be static
-*/
+ * I don't use statics for this because it's a pain in the ass (they need to be initialized to be resolved)
+ * Just don't change any values on runtime as they should all be static
+ */
 class CAddresses
 {
-public:
-	void Init(eSampVersion ver)
+private:
+	/* str_len = strlen() of cmp_str, needs to be even */
+	static bool compareMemory(const void* ptr, const char* cmp_str, int str_len)
 	{
-		switch (ver)
+		char cmpbyte[3] = { 0 };
+		for (int i = 0; i < str_len; i += 2)
 		{
-		case SAMP_037_R2:
-			OFFSET_SampInfo = 0x21A100;
-			OFFSET_SampInfo_pPools = 0x3C5;
-			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
-			OFFSET_VehiclePool_pGtaVehicles = 0x4FB4;
-			FUNC_IDFromGtaPtr = 0x1B180;
-			//FUNC_CVehiclePool_CreateVehicle = 0x1B670;
-			break;
-		case SAMP_037_R3:
-			OFFSET_SampInfo = 0x26E8DC;
-			OFFSET_SampInfo_pPools = 0x3DE;
-			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
-			OFFSET_VehiclePool_pGtaVehicles = 0x4FB4;
-			FUNC_IDFromGtaPtr = 0x1E440;
-			//FUNC_CVehiclePool_CreateVehicle = 0x1B670;
-			break;
-		case SAMP_03DL: // R1
-			OFFSET_SampInfo = 0x2ACA24;
-			OFFSET_SampInfo_pPools = 0x3DE;
-			OFFSET_SampInfo_pPools_pVehiclePool = 0xC;
-			OFFSET_VehiclePool_pGtaVehicles = 0x4FB4;
-			FUNC_IDFromGtaPtr = 0x1E650;
-			//FUNC_CVehiclePool_CreateVehicle = 0x1EB40;
-			break;
+			if (i + 1 >= str_len)
+				return false;
+			cmpbyte[0] = cmp_str[i];
+			cmpbyte[1] = cmp_str[i + 1];
+
+			if (*(uint8_t*)((uint8_t*)ptr + (i / 2)) != (uint8_t)strtoul(cmpbyte, NULL, 16))
+				return false;
 		}
+		return true;
+	}
+
+	bool loaded = false;
+
+public:
+
+	bool	isLoaded() { return this->loaded; }
+
+	bool	detectVersionAndLoadOffsets(DWORD dwSAMP)
+	{
+		CSimpleIniA ini;
+		if (ini.LoadFile(CHANDLING_OFFSETS_FILE) < 0)
+		{
+			LogError("Couldn't open " CHANDLING_OFFSETS_FILE);
+			return false;
+		}
+
+		CSimpleIniA::TNamesDepend sections;
+		ini.GetAllSections(sections);
+
+		for (CSimpleIniA::TNamesDepend::const_iterator i = sections.begin(); i != sections.end(); i++)
+		{
+			if (CAddresses::compareMemory((void*)(dwSAMP + 0xBABE), i->pItem, strlen(i->pItem)))
+			{
+				DebugPrint("Detected SA:MP version %s", ini.GetValue(i->pItem, "name", "unknown"));
+
+				// Load offsets from an ini file
+				this->OFFSET_SampInfo = ini.GetLongValue(i->pItem, "OFFSET_SampInfo");
+				this->OFFSET_SampInfo_pPools = ini.GetLongValue(i->pItem, "OFFSET_SampInfo_pPools");
+				this->OFFSET_SampInfo_pPools_pVehiclePool = ini.GetLongValue(i->pItem, "OFFSET_SampInfo_pPools_pVehiclePool");
+				this->OFFSET_VehiclePool_pGtaVehicles = ini.GetLongValue(i->pItem, "OFFSET_VehiclePool_pGtaVehicles");
+				this->FUNC_IDFromGtaPtr = ini.GetLongValue(i->pItem, "FUNC_IDFromGtaPtr");
+
+				/*DebugPrint("sampinfo 0x%x = %d", this->OFFSET_SampInfo, this->OFFSET_SampInfo);
+				DebugPrint("pools 0x%x", this->OFFSET_SampInfo_pPools);
+				DebugPrint("vehiclepool 0x%x", this->OFFSET_SampInfo_pPools_pVehiclePool);
+				DebugPrint("gtavehicles 0x%x", this->OFFSET_VehiclePool_pGtaVehicles);
+				DebugPrint("idfromgtaptr 0x%x", this->FUNC_IDFromGtaPtr);*/
+				this->loaded = true;
+				return true;
+			}
+		}
+		
+		LogError("No version matching, 0xBABE: %X%X", *(uint8_t*)(dwSAMP + 0xBABE), *(uint8_t*)(dwSAMP + 0xBABE + 1));
+		return false;
 	}
 
 	DWORD	OFFSET_SampInfo = 0;

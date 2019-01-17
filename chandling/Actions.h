@@ -1,3 +1,4 @@
+#pragma once
 #include "raknet/BitStream.h"
 
 // idk why i even made this, guess I like unordered maps
