@@ -6,8 +6,6 @@
 Handling shite we need
 */
 
-#pragma pack(push, 1)
-
 struct  tTransmissionGear
 {
 	float m_fMaxVelocity;
@@ -216,6 +214,8 @@ struct tHandlingData {
 	eVehicleLightsSize m_nRearLights;
 	unsigned char      m_nAnimGroup;
 };
+
+static_assert(sizeof(tHandlingData) == 0xE0, "Memory disalignment: sizeof tHandlingData is not equal to 0xE0");
 
 
 struct CTrainFlags
@@ -542,5 +542,3 @@ public:
 	static bool &s_bPlaneGunsEjectShellCasings;
 	static CColModel *m_aSpecialColModel; // static CColModel m_aSpecialColModel[4]
 };
-
-#pragma pack(pop)

@@ -289,7 +289,7 @@ CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMissi
 	int handlingIndex = -1;
 	bool swapped = false;
 
-	if (gInited && pCreatedVehicleInfo != nullptr && model == pCreatedVehicleInfo->model && IS_VALID_VEHICLE_MODEL(pCreatedVehicleInfo->model))
+	if (gInited && pCreatedVehicleInfo != nullptr && model == pCreatedVehicleInfo->model)
 	{
 		handlingIndex = ((t_GetHandlingId)0x6F4FD0)(0x0, szModelHandlingNames[VEHICLE_MODEL_INDEX(model)]);
 		struct tHandlingData* pCustomHandling = HandlingMgr::GetHandlingPtrForVehicle(pCreatedVehicleInfo->id, model);
@@ -325,13 +325,11 @@ CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMissi
 
 int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, struct stVehicleCreationInfo &vehinfo)
 {
-	// FIX!! VEHICLEID IS NOT VEHICLEID ITS A POINTER TO VEHICLE CREATION STRUCT
 	pCreatedVehicleInfo = &vehinfo;
-	int ret = originalSampCreateVehicle(thisptr, vehinfo);
+	int ret = originalSampCreateVehicle(thisptr, vehinfo); // this calls CCarCtrlCreateCarForScript
 	pCreatedVehicleInfo = nullptr;
 	if (!gInited)
 		return ret;
-	// original func calls CCarCtrl::CreateCar.. so now we should have a pointer to the created vehicle stored in qCreatedVehiclePtrs
 
 	//int id = SampIDFromGtaPtr((DWORD*)dwSampVehPool, (int)ptr);
 	CVehicle* ptr = pID2PTR[vehinfo.id]; //qCreatedVehiclePtrs.front();
@@ -339,7 +337,6 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, struct stVehic
 		return ret;
 
 	DebugPrint("CreateVehicle id %d model %d pointer 0x%x", vehinfo.id, vehinfo.model, (int)ptr);
-	//DebugPrint("vehpool 0x%x pools 0x%x ptrFromId 0x%x", (int)dwSampVehPool, (int)dwSampPools, (int)pID2PTR[id]);
 
 	HandlingMgr::InitVehicle(vehinfo.id, vehinfo.model);
 
