@@ -5,6 +5,7 @@
 #define FUNC_CCarCtrl_CreateCarForScript 0x431f80
 
 #define CHANDLING_OFFSETS_FILE "chandling_offsets.ini"
+#define CHANDLING_REPO_URL "https://github.com/dotSILENT/chandling/raw/master/"
 
 
 /*
@@ -16,6 +17,8 @@ class CAddresses
 private:
 	/* str_len = strlen() of cmp_str, needs to be even */
 	static bool compareMemory(const void* ptr, const char* cmp_str, int str_len);
+
+	bool parseFile(uint32_t dwSAMP);
 
 	bool loaded = false;
 

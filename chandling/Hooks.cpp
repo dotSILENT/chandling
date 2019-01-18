@@ -517,8 +517,6 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 			return result;
 		}
 
-		DebugPrint("sampinfo 0x%x", Addr.OFFSET_SampInfo);
-
 		DWORD * info = (DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
 		if (*(DWORD**)info == nullptr)
 			return result;
