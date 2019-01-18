@@ -3,6 +3,9 @@
 #include "raknet/RakClientInterface.h"
 #include "game/game.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
 #include "detours.h"
 #pragma comment(lib, "detours.lib")
 
@@ -18,6 +21,7 @@ CAddresses Addr;
 
 #include <queue>
 #include <unordered_map>
+
 
 const char szModelHandlingNames[MAX_VEHICLE_MODELS][12] =
 {
@@ -512,6 +516,8 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 			UNHOOK();
 			return result;
 		}
+
+		DebugPrint("sampinfo 0x%x", Addr.OFFSET_SampInfo);
 
 		DWORD * info = (DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
 		if (*(DWORD**)info == nullptr)

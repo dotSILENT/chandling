@@ -4,8 +4,6 @@
 // idk why i even made this, guess I like unordered maps
 // only one 'callback' can be attached to one action ID
 
-typedef unsigned char BYTE;
-
 enum CHandlingAction : unsigned char
 {
 	ACTION_INIT = 10, // This is the only packet that is sent by the player, to indicate that we can speak to him

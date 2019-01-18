@@ -1,8 +1,6 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
-#define _WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <stdarg.h>
+#include <cstdarg>
 #include <cstdio>
 #include "game/game.h"
 
@@ -35,6 +33,6 @@ void LogError(const char *fmt, ...);
 
 
 extern bool gInited;
-extern DWORD dwSampDLL;
+extern uint32_t dwSampDLL;
 extern CVehicle** pID2PTR;
 

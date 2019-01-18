@@ -1,8 +1,10 @@
 #include "main.h"
 #include "Hooks.h"
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
 // globals
-DWORD dwSampDLL = NULL;
+uint32_t dwSampDLL = NULL;
 bool gInited = false;
 CVehicle** pID2PTR = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct CVehicle class pointer
 

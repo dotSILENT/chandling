@@ -45,15 +45,15 @@
     <ClCompile Include="HandlingEnum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CAddresses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\CSomeClassess.h">
-      <Filter>Header Files\game</Filter>
-    </ClInclude>
-    <ClInclude Include="game\CVector.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
     <ClInclude Include="game\game.h">

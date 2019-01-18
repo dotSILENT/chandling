@@ -1,6 +1,7 @@
-#include "main.h"
 #include "HandlingManager.h"
+#include "main.h"
 #include "HandlingDefault.h"
+#include <cstring>
 
 namespace HandlingMgr
 {

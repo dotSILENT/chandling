@@ -8,7 +8,15 @@ Do not delete this comment block. Respect others' work!
 //#include "PluginBase.h"
 //#include "CEntity.h"
 //#include "CColPoint.h"
-#include "CVector.h"
+//#include "CVector.h"
+#pragma pack(push, 1)
+class CVector
+{
+public:
+	float fX;
+	float fY;
+	float fZ;
+};
 //#include "CQuaternion.h"
 //#include "CRealTimeShadow.h"
 //#include "CRepeatSector.h"
@@ -249,3 +257,5 @@ class CColModel
 public:
 	char pad3523523[0x30];
 };
+
+#pragma pack(pop)

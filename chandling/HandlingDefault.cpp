@@ -1,5 +1,6 @@
 #include "main.h"
 #include "HandlingDefault.h"
+#include <cstring>
 
 
 namespace HandlingDefault
