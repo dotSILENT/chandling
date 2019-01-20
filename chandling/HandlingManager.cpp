@@ -174,6 +174,13 @@ namespace HandlingMgr
 			{
 				DebugPrint("ApplyVehicleMods live change on ptr 0x%x (vehicle id %d)", (int)ptr, vehicleID);
 				ptr->m_pHandlingData = vehicleHandlings[vehicleID].pCurrentHandling;
+
+				// Some values need to be copied to the vehicle itself
+				// TODO do the same when setting model handlings maybe?
+				ptr->m_fTurnMass = ptr->m_pHandlingData->m_fTurnMass;
+				ptr->m_fMass = ptr->m_pHandlingData->m_fMass;
+				ptr->m_nHandlingFlagsIntValue = ptr->m_pHandlingData->m_nHandlingFlags;
+				ptr->m_vecCentreOfMass = ptr->m_pHandlingData->m_vecCentreOfMass;
 			}
 		}
 		return true;
