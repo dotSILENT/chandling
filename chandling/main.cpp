@@ -6,6 +6,7 @@
 // globals
 uint32_t dwSampDLL = NULL;
 bool gInited = false;
+bool gUsingCHandling = false;
 CVehicle** pID2PTR = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct CVehicle class pointer
 
 FILE *g_fLog;

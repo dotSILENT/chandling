@@ -290,7 +290,7 @@ CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMissi
 	int handlingIndex = -1;
 	bool swapped = false;
 
-	if (gInited && pCreatedVehicleInfo != nullptr && model == pCreatedVehicleInfo->model)
+	if (gUsingCHandling && pCreatedVehicleInfo != nullptr && model == pCreatedVehicleInfo->model)
 	{
 		handlingIndex = ((t_GetHandlingId)0x6F4FD0)(0x0, szModelHandlingNames[VEHICLE_MODEL_INDEX(model)]);
 		struct tHandlingData* pCustomHandling = HandlingMgr::GetHandlingPtrForVehicle(pCreatedVehicleInfo->id, model);
@@ -306,7 +306,7 @@ CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMissi
 	}
 
 	CVehicle* ptr = originalCCarCtrlCreateCar(model, pos, isMission);
-	if (!gInited)
+	if (!gInited || !gUsingCHandling)
 		return ptr;
 
 	// Swap back the original handling
@@ -329,7 +329,7 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, struct stVehic
 	pCreatedVehicleInfo = &vehinfo;
 	int ret = originalSampCreateVehicle(thisptr, vehinfo); // this calls CCarCtrlCreateCarForScript
 	pCreatedVehicleInfo = nullptr;
-	if (!gInited)
+	if (!gInited || !gUsingCHandling)
 		return ret;
 
 	//int id = SampIDFromGtaPtr((DWORD*)dwSampVehPool, (int)ptr);
@@ -371,6 +371,7 @@ int __fastcall hookedConnect(RakClientInterface* thisptr, DWORD EDX, char* hostn
 	// Re-send the init packet
 	bWelcomeSent = false;
 	bSendWelcome = false;
+	gUsingCHandling = false;
 	// Reset stuff to defaults
 	HandlingMgr::InitializeModelDefaults();
 	return originalConnect(thisptr, hostname, port, hostshort, a5, a6);
@@ -387,7 +388,7 @@ Packet* __fastcall hookedReceive(RakClientInterface* thisptr)
 		BitStream bs;
 		bs.Write((BYTE)ID_CHANDLING);
 		bs.Write((BYTE)CHandlingAction::ACTION_INIT);
-		bs.Write((int)rand()); // TODO replace to some version number
+		bs.Write((uint32_t)CHANDLING_COMPAT_VERSION);
 
 		thisptr->Send(&bs, HIGH_PRIORITY, RELIABLE, 0);
 
@@ -507,10 +508,7 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 		DebugPrint("SAMP Module loaded at 0x%x, checking for updates", (DWORD)dwSampDLL);
 		// Check for updates
 		if (UpdateChecker::CheckForUpdate())
-		{
 			startTime = GetTickCount(); // reset the waiting time if an update was found
-			SetFocus(hWnd);
-		}
 	}
 	else if (!gInited)
 	{

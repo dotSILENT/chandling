@@ -5,10 +5,30 @@
 #include "HandlingManager.h"
 //#include "HandlingEnum.h"
 
+void OnServerInit(ActionParams* p)
+{
+	DebugPrint("OnServerInit");
+
+	uint32_t compat_ver;
+	p->bsData->Read(compat_ver);
+	bool allowed = false;
+	p->bsData->Read(allowed);
+
+	if (!allowed)
+	{
+		// Client has older compatibility version, cannot use CHandling
+		LogError("Incorrect compatibility version (client: 0x%x, server: 0x%x), update the plugin!", CHANDLING_COMPAT_VERSION, compat_ver);
+		return;
+	}
+
+	// allow handling modifications
+	gUsingCHandling = true;
+}
+
 void OnSetVehicleHandling(ActionParams* p)
 {
 	DebugPrint("OnSetVehicleHandling");
-	if (p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t) + sizeof(uint8_t))
+	if (!gUsingCHandling || p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t) + sizeof(uint8_t))
 		return;
 
 	uint16_t vehicleid = 0;
@@ -52,7 +72,7 @@ void OnSetVehicleHandling(ActionParams* p)
 
 void OnResetVehicle(ActionParams* p)
 {
-	if (p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t))
+	if (!gUsingCHandling || p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t))
 		return;
 	uint16_t vehicleid = 0;
 	p->bsData->Read(vehicleid);
@@ -63,7 +83,7 @@ void OnResetVehicle(ActionParams* p)
 
 void OnSetModelHandling(ActionParams* p)
 {
-	if (p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t) + sizeof(uint8_t))
+	if (!gUsingCHandling || p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t) + sizeof(uint8_t))
 		return;
 	
 	uint16_t modelid = 0;
@@ -105,7 +125,7 @@ void OnSetModelHandling(ActionParams* p)
 
 void OnResetModel(ActionParams* p)
 {
-	if (p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t))
+	if (!gUsingCHandling || p->bsData->GetNumberOfBytesUsed() < sizeof(uint16_t))
 		return;
 	uint16_t modelid = 0;
 	p->bsData->Read(modelid);
@@ -119,6 +139,7 @@ void OnResetModel(ActionParams* p)
 
 void RegisterAllActionCallbacks()
 {
+	Actions::Register(ACTION_INIT_RESPONSE, OnServerInit);
 	Actions::Register(ACTION_RESET_VEHICLE, OnResetVehicle);
 	Actions::Register(ACTION_SET_VEHICLE_HANDLING, OnSetVehicleHandling);
 	Actions::Register(ACTION_SET_MODEL_HANDLING, OnSetModelHandling);

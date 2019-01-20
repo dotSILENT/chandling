@@ -5,6 +5,7 @@
 #include "game/game.h"
 
 #define CHANDLING_VERSION "1.0"
+#define CHANDLING_COMPAT_VERSION 0x1001D
 
 #define CHANDLING_GITHUB_REPO "dotSILENT/chandling"
 
@@ -37,6 +38,7 @@ void LogError(const char *fmt, ...);
 
 
 extern bool gInited;
+extern bool gUsingCHandling;
 extern uint32_t dwSampDLL;
 extern CVehicle** pID2PTR;
 

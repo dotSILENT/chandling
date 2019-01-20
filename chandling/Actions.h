@@ -7,6 +7,7 @@
 enum CHandlingAction : unsigned char
 {
 	ACTION_INIT = 10, // This is the only packet that is sent by the player, to indicate that we can speak to him
+	ACTION_INIT_RESPONSE,
 
 	ACTION_RESET_MODEL = 15,
 	ACTION_RESET_VEHICLE,
