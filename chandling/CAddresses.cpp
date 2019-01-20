@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <cstdio>
 
-#pragma warning(disable : 4996) // fopenm may be unsafe
+#pragma warning(disable : 4996) // fopen may be unsafe
 
 #include "curl/curl.h"
 #pragma comment(lib, "curl/lib/libcurl.lib")
@@ -78,36 +78,41 @@ bool CAddresses::detectVersionAndLoadOffsets(uint32_t dwSAMP)
 	if (!CAddresses::parseFile(dwSAMP))
 	{
 		// Fetch the newest offsets file from GitHub repo and try again
+#define OFFSETSURL "https://github.com/" CHANDLING_GITHUB_REPO "/raw/master/" CHANDLING_OFFSETS_FILE
 
-		DebugPrint("Fetching "  CHANDLING_OFFSETS_FILE " from " CHANDLING_REPO_URL);
+		DebugPrint("Fetching "  CHANDLING_OFFSETS_FILE " from " OFFSETSURL);
 		CURL *curl;
 		CURLcode res;
 		curl_global_init(CURL_GLOBAL_ALL);
 		curl = curl_easy_init();
 
-		if (curl)
+		if (!curl)
 		{
-			FILE *fp = fopen(CHANDLING_OFFSETS_FILE, "wb");
-			if (!fp)
-			{
-				LogError("Couldn't open " CHANDLING_OFFSETS_FILE " for writing");
-				curl_easy_cleanup(curl);
-				return false;
-			}
-			curl_easy_setopt(curl, CURLOPT_URL, CHANDLING_REPO_URL CHANDLING_OFFSETS_FILE);
-			curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-			curl_easy_setopt(curl, CURLOPT_CRLF, 1L);
-			curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-			res = curl_easy_perform(curl);
 			curl_easy_cleanup(curl);
-			fclose(fp);
-
-			if (CAddresses::parseFile(dwSAMP))
-				return true;
+			return false;
 		}
+
+		FILE *fp = fopen(CHANDLING_OFFSETS_FILE, "wb");
+		if (!fp)
+		{
+			LogError("Couldn't open " CHANDLING_OFFSETS_FILE " for writing");
+			curl_easy_cleanup(curl);
+			return false;
+		}
+		curl_easy_setopt(curl, CURLOPT_URL, OFFSETSURL);
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+		curl_easy_setopt(curl, CURLOPT_CRLF, 1L);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+		res = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
+		fclose(fp);
+
+		if (CAddresses::parseFile(dwSAMP))
+			return true;
 	}
 	else return true;
 
+#undef OFFSETSURL
 	return false;
 }
 

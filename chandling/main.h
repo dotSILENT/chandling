@@ -4,6 +4,10 @@
 #include <cstdio>
 #include "game/game.h"
 
+#define CHANDLING_VERSION "1.0"
+
+#define CHANDLING_GITHUB_REPO "dotSILENT/chandling"
+
 #define CHANDLING_ERROR_LOG "chandling_errors.log"
 
 #define DEBUG

@@ -15,6 +15,7 @@
 #include "ActionCallbacks.h"
 #include "HandlingDefault.h"
 #include "HandlingManager.h"
+#include "UpdateChecker.h"
 #include "CAddresses.h"
 
 CAddresses Addr;
@@ -503,7 +504,13 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 
 	if (dwSampDLL == NULL && (dwSampDLL = (DWORD)GetModuleHandleA("samp.dll")) != NULL)
 	{
-		DebugPrint("SAMP Module loaded at 0x%x", (DWORD)dwSampDLL);
+		DebugPrint("SAMP Module loaded at 0x%x, checking for updates", (DWORD)dwSampDLL);
+		// Check for updates
+		if (UpdateChecker::CheckForUpdate())
+		{
+			startTime = GetTickCount(); // reset the waiting time if an update was found
+			SetFocus(hWnd);
+		}
 	}
 	else if (!gInited)
 	{
@@ -514,8 +521,7 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 			return result;
 		}
 
-		DWORD * info = (DWORD*)(dwSampDLL + Addr.OFFSET_SampInfo);
-		if (*(DWORD**)info == nullptr)
+		if (*(DWORD**)(dwSampDLL + Addr.OFFSET_SampInfo) == nullptr)
 			return result;
 
 		gInited = true;

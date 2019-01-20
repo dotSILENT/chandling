@@ -159,6 +159,7 @@
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="raknet\BitStream.cpp" />
+    <ClCompile Include="UpdateChecker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionCallbacks.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="raknet\BitStream.h" />
     <ClInclude Include="raknet\RakClientInterface.h" />
     <ClInclude Include="SimpleIni.h" />
+    <ClInclude Include="UpdateChecker.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="detours.lib" />
