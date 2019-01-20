@@ -16,5 +16,5 @@ In order to be injected into the game, this plugin requires ASI Loader
 2. Extract the files to your GTA SA installation directory
 
 ## Thanks to
-DK22Pac - for his [plugin sdk](https://github.com/DK22Pac/plugin-sdk) that I took some structs from
-ini - for helping with various problems that occured along the way
+* DK22Pac - for his [plugin sdk](https://github.com/DK22Pac/plugin-sdk) that I took some structs from
+* ini - for helping with various problems that occured along the way
