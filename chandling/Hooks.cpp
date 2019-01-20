@@ -539,7 +539,7 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 			// SAMP Hooking successful, now hook GTA functions
 			SetupGtaHooks();
 		}
-		DebugPrint("SAMP Initialized");
+		DebugPrint("SAMP Initialized, plugin version " CHANDLING_VERSION);
 		RegisterAllActionCallbacks();
 		
 		UNHOOK();
