@@ -7,6 +7,7 @@ CHandlingAttribType GetHandlingAttribType(CHandlingAttrib attribute)
 	switch (attribute)
 	{
 	case HANDL_FMASS:
+	case HANDL_FTURNMASS:
 	case HANDL_FDRAGMULTIPLIER:
 	case HANDL_CENTREOFMASS_X:
 	case HANDL_CENTREOFMASS_Y:
@@ -38,6 +39,7 @@ CHandlingAttribType GetHandlingAttribType(CHandlingAttrib attribute)
 	case HANDL_TR_NDRIVETYPE:
 	case HANDL_TR_NENGINETYPE:
 	case HANDL_TR_NNUMBEROFGEARS:
+	case HANDL_BABS:
 		return TYPE_BYTE;
 
 	case HANDL_UIDENTIFIER:
@@ -70,6 +72,8 @@ void* GetHandlingAttribPtr(struct tHandlingData *handling, CHandlingAttrib attri
 	{
 	case HANDL_FMASS:
 		return &handling->m_fMass;
+	case HANDL_FTURNMASS:
+		return &handling->m_fTurnMass;
 	case HANDL_FDRAGMULTIPLIER:
 		return &handling->m_fDragMult;
 	case HANDL_CENTREOFMASS_X:
@@ -129,6 +133,8 @@ void* GetHandlingAttribPtr(struct tHandlingData *handling, CHandlingAttrib attri
 		return &handling->m_transmissionData.m_nEngineType;
 	case HANDL_TR_NNUMBEROFGEARS:
 		return &handling->m_transmissionData.m_nNumberOfGears;
+	case HANDL_BABS:
+		return &handling->m_bABS;
 
 	case HANDL_UIDENTIFIER:
 		return &handling->m_iIndex;
