@@ -37,6 +37,8 @@ bool UpdateChecker::CheckForUpdate()
 	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlWriteCallback);
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 1000);
+	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, 1000);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
 	res = curl_easy_perform(curl);
 	curl_easy_cleanup(curl);

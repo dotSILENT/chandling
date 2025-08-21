@@ -433,21 +433,21 @@ bool SetupSampHooks()
 			LogError("Couldn't get OFFSET_SampInfo (0x%x)", Addr.OFFSET_SampInfo);
 			return false;
 		}
-		DebugPrint("dwSampInfo 0x%x @ 0x%x", dwSampInfo, (dwSampDLL + Addr.OFFSET_SampInfo));
+		DebugPrint("dwSampInfo 0x%X @ 0x%X", dwSampInfo, (dwSampDLL + Addr.OFFSET_SampInfo));
 		dwSampPools = *(DWORD*)(dwSampInfo + Addr.OFFSET_SampInfo_pPools);
 		if ((PDWORD)dwSampPools == nullptr)
 		{
-			LogError("Couldn't get OFFSET_SampInfo_pPools (0x%x)", Addr.OFFSET_SampInfo_pPools);
+			LogError("Couldn't get OFFSET_SampInfo_pPools (0x%X + 0x%X)", dwSampInfo, Addr.OFFSET_SampInfo_pPools);
 			return false;
 		}
-		DebugPrint("dwSampPools 0x%x", dwSampPools);
+		DebugPrint("dwSampPools 0x%X", dwSampPools);
 		dwSampVehPool = *(DWORD*)(dwSampPools + Addr.OFFSET_SampInfo_pPools_pVehiclePool);
 		if ((PDWORD)dwSampVehPool == nullptr)
 		{
-			LogError("Couldn't get OFFSET_SampInfo_pPools_pVehiclePool (0x%x)", Addr.OFFSET_SampInfo_pPools_pVehiclePool);
+			LogError("Couldn't get OFFSET_SampInfo_pPools_pVehiclePool (0x%X + 0x%X)", dwSampVehPool, Addr.OFFSET_SampInfo_pPools_pVehiclePool);
 			return false;
 		}
-		DebugPrint("dwSampVehPool 0x%x", dwSampVehPool);
+		DebugPrint("dwSampVehPool 0x%X", dwSampVehPool);
 
 		pID2PTR = reinterpret_cast<CVehicle**>((PDWORD)(dwSampVehPool + Addr.OFFSET_VehiclePool_pGtaVehicles));
 		//SampIDFromGtaPtr = (tSampIDFromGtaPtr)(dwSampDLL + Addr.FUNC_IDFromGtaPtr);

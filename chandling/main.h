@@ -11,7 +11,7 @@
 
 #define CHANDLING_ERROR_LOG "chandling_errors.log"
 
-#define DEBUG
+//#define DEBUG
 
 /* Uncomment this to save all the handlings from handling.cfg (mapped to their models) to a file */
 //#define DUMP_DEFAULT_HANDLINGS

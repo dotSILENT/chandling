@@ -172,7 +172,7 @@ namespace HandlingMgr
 			CVehicle* ptr = pID2PTR[vehicleID];
 			if (ptr != nullptr)
 			{
-				DebugPrint("ApplyVehicleMods live change on ptr 0x%x (vehicle id %d)", (int)ptr, vehicleID);
+				DebugPrint("ApplyVehicleMods live change on ptr 0x%x (vehicle id %d model %d)", (int)ptr, vehicleID, ptr->m_nModelID);
 				ptr->m_pHandlingData = vehicleHandlings[vehicleID].pCurrentHandling;
 
 				// Some values need to be copied to the vehicle itself
