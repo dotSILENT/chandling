@@ -32,6 +32,6 @@ public:
 	uint32_t	OFFSET_SampInfo_pPools_pVehiclePool = 0;
 	uint32_t	OFFSET_VehiclePool_pGtaVehicles = 0;
 
-	uint32_t	FUNC_IDFromGtaPtr = 0; // can be found by searching for 'Stay within the ~r~world boundaries'
+	//uint32_t	FUNC_IDFromGtaPtr = 0; // can be found by searching for 'Stay within the ~r~world boundaries'
 	//DWORD	FUNC_CVehiclePool_CreateVehicle = 0; // FindPattern finds it for us, but it can be found by searching for 'vehicle %u was not deleted'
 };
