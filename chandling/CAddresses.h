@@ -6,6 +6,7 @@
 
 #define CHANDLING_OFFSETS_FILE "chandling_offsets.ini"
 
+#define SAMP_VER_OFFSET 0xBABE
 
 /*
  * I don't use statics for this because it's a pain in the ass (they need to be initialized to be resolved)
@@ -14,8 +15,7 @@
 class CAddresses
 {
 private:
-	/* str_len = strlen() of cmp_str, needs to be even */
-	static bool compareMemory(const void* ptr, const char* cmp_str, int str_len);
+	static bool compareMemory(const char* cmp_str, int str_len);
 
 	bool parseFile(uint32_t dwSAMP);
 
