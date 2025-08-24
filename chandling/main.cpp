@@ -4,10 +4,13 @@
 #include <Windows.h>
 
 // globals
-uint32_t dwSampDLL = NULL;
+DWORD dwSampDLL = NULL;
 bool gInited = false;
 bool gUsingCHandling = false;
 CVehicle** pID2PTR = nullptr; // CVehicle* m_pGTAVehicles[] array in samp's vehicle pool class, translates samp vehicle ID (index) to a direct CVehicle class pointer
+
+DWORD *pSampChat = nullptr;
+tAddChatMessage addChatMsgFn = nullptr;
 
 FILE *g_fLog;
 
@@ -58,4 +61,19 @@ void LogError(const char *fmt, ...)
 	va_end(ap);
 	fprintf(g_fLog, "\n");
 	fflush(g_fLog);
+}
+
+void AddChatMessageRaw(const char* fmt, ...)
+{
+	if (!pSampChat || !addChatMsgFn || !*pSampChat)
+		return;
+
+	// format here bc floats get corrupted when forwarding va_list to addChatMsgFn for some reason
+	char buffer[512];
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(buffer, sizeof(buffer), fmt, args);
+	va_end(args);
+
+	addChatMsgFn(*pSampChat, buffer);
 }

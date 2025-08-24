@@ -4,7 +4,7 @@
 #include <cstdio>
 #include "game/game.h"
 
-#define CHANDLING_VERSION "v1.0"
+#define CHANDLING_VERSION "v1.1"
 #define CHANDLING_COMPAT_VERSION 0x1001D
 
 #define CHANDLING_GITHUB_REPO "dotSILENT/chandling"
@@ -17,7 +17,7 @@
 //#define DUMP_DEFAULT_HANDLINGS
 
 #ifdef DEBUG
-#define DebugPrint(str,...) printf("[cHandling] " str "\n", __VA_ARGS__)
+#define DebugPrint(str,...) printf("[cHandling] " str "\n", __VA_ARGS__);AddChatMessage(str, __VA_ARGS__)
 #else 
 #define DebugPrint(...)
 #endif
@@ -36,9 +36,16 @@ void LogError(const char *fmt, ...);
 #define VEHICLE_MODEL_INDEX(modelid) \
 	(modelid - 400)
 
+typedef unsigned long DWORD; // just so we dont include whole Windows.h here
 
 extern bool gInited;
 extern bool gUsingCHandling;
-extern uint32_t dwSampDLL;
+extern DWORD dwSampDLL;
 extern CVehicle** pID2PTR;
 
+typedef int(__cdecl *tAddChatMessage)(DWORD pChat, const char* fmt, ...);
+extern DWORD *pSampChat;
+extern tAddChatMessage addChatMsgFn;
+
+void AddChatMessageRaw(const char* fmt, ...);
+#define AddChatMessage(fmt,...) AddChatMessageRaw("[cHandling] " fmt, __VA_ARGS__)

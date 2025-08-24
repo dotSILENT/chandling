@@ -18,11 +18,13 @@ void OnServerInit(ActionParams* p)
 	{
 		// Client has older compatibility version, cannot use CHandling
 		LogError("Incorrect compatibility version (client: 0x%x, server: 0x%x), update the plugin!", CHANDLING_COMPAT_VERSION, compat_ver);
+		AddChatMessage("{ff0000}Server has different version, update the plugin!");
 		return;
 	}
 
 	// allow handling modifications
 	gUsingCHandling = true;
+	AddChatMessage("Server is using cHandling plugin");
 }
 
 void OnSetVehicleHandling(ActionParams* p)
@@ -78,7 +80,7 @@ void OnResetVehicle(ActionParams* p)
 	p->bsData->Read(vehicleid);
 
 	HandlingMgr::InitVehicle(vehicleid, -1, true);
-	DebugPrint("OnResetVehicle");
+	DebugPrint("OnResetVehicle %d", vehicleid);
 }
 
 void OnSetModelHandling(ActionParams* p)
@@ -134,7 +136,7 @@ void OnResetModel(ActionParams* p)
 		return;
 	
 	HandlingMgr::InitializeModelDefaults(modelid);
-	DebugPrint("OnResetModel");
+	DebugPrint("OnResetModel %d", modelid);
 }
 
 void RegisterAllActionCallbacks()

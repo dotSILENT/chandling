@@ -313,7 +313,7 @@ CVehicle* __cdecl hookedCCarCtrlCreateCar(DWORD model, CVector pos, BYTE isMissi
 	if (swapped)
 		memcpy(pGtaHandling, &orgHandling, sizeof(struct tHandlingData));
 
-	DebugPrint("Created vehicle ptr[0x%x] model %d at %f %f %f", (int)ptr, model, pos.fX, pos.fY, pos.fZ);
+	DebugPrint("Created vehicle ptr[0x%X] model %d at %f %f %f", (int)ptr, model, pos.fX, pos.fY, pos.fZ);
 	return ptr;
 }
 
@@ -337,7 +337,7 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, struct stVehic
 	if (!ptr)
 		return ret;
 
-	DebugPrint("CreateVehicle id %d model %d pointer 0x%x", vehinfo.id, vehinfo.model, (int)ptr);
+	DebugPrint("CreateVehicle id %d model %d pointer 0x%X", vehinfo.id, vehinfo.model, (int)ptr);
 
 	HandlingMgr::InitVehicle(vehinfo.id, vehinfo.model);
 
@@ -354,7 +354,7 @@ int __fastcall hookedSampCreateVehicle(DWORD *thisptr, DWORD EDX, struct stVehic
 		return ret;
 	}
 
-	DebugPrint("pHandl 0x%x index %d=%d dragmult %f=%f", (int)pHandl, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
+	DebugPrint("pHandl 0x%X index %d=%d dragmult %.3f=%.3f", (int)pHandl, pHandl->m_iIndex, ptr->m_pHandlingData->m_iIndex, pHandl->m_fDragMult, ptr->m_pHandlingData->m_fDragMult);
 	return ret;
 }
 
@@ -474,6 +474,22 @@ bool SetupSampHooks()
 			return false;
 		}
 		originalReceive = (tReceive)DetourFunction((PBYTE)dwAddr, (PBYTE)hookedReceive);
+
+		// Try to find chat related stuff dynamically without using any hardcoded offsets
+		// Find "Connected. Joining the game" first
+		dwAddr = FindPattern(dwSampDLL, "\x43\x6F\x6E\x6E\x65\x63\x74\x65\x64\x2E\x20\x4A\x6F\x69\x6E\x69\x6E\x67\x20\x74\x68\x65\x20\x67\x61\x6D\x65", "xxxxxxxxxxxxxxxxxxxxxxxxxxx");
+		if (dwAddr) {
+			char pattern[] = "\xA1\x00\x00\x00\x00\x81\xF2\x00\x00\x00\x00\x3B\xC5\x89\x54\x24\x18\x74\x0E\x68\x00\x00\x00\x00\x50\xE8\x00\x00\x00\x00";
+			*(DWORD*)(pattern + 20) = dwAddr; // push found "Connected..." addr to the pattern so its 100% on point (overkill but who cares)
+			dwAddr = FindPattern(dwSampDLL, pattern, "x????xx????xxxxxxxxxxxxxxx????");
+			if (dwAddr) {
+				DebugPrint("Chat pattern found at 0x%X", dwAddr);
+				// Extract the chat pointer & sub address
+				pSampChat = *(PDWORD*)(dwAddr + 1); // found place starts with mov eax, [pSampChat] so extract the moved pointer
+				DWORD callOffset = *(DWORD*)(dwAddr + 26); // get offset after E8 instruction
+				addChatMsgFn = (tAddChatMessage)(dwAddr + 25 + 5 + callOffset); // relative offset -> absolute address
+			}
+		}
 		return true;
 	}
 	return false;
@@ -498,14 +514,14 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 
 	if (!gInited && GetTickCount() - startTime >= 35 * 1000)
 	{
-		DebugPrint("SAMP Module not found, exiting...");
+		DebugPrint("samp.dll not found, exiting...");
 		UNHOOK();
 		return result;
 	}
 
 	if (dwSampDLL == NULL && (dwSampDLL = (DWORD)GetModuleHandleA("samp.dll")) != NULL)
 	{
-		DebugPrint("SAMP Module loaded at 0x%x, checking for updates", (DWORD)dwSampDLL);
+		DebugPrint("samp.dll loaded at 0x%x, checking for updates", (DWORD)dwSampDLL);
 		// Check for updates
 		if (UpdateChecker::CheckForUpdate())
 			startTime = GetTickCount(); // reset the waiting time if an update was found
@@ -527,7 +543,7 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 		HandlingDefault::Initialize();
 		HandlingMgr::InitializeModelDefaults();
 
-		DebugPrint("Setting up SAMP Hooks");
+		DebugPrint("Setting up SA:MP Hooks");
 		if (!SetupSampHooks())
 		{
 			gInited = false;
@@ -539,7 +555,11 @@ BOOL WINAPI hookPeekMessageA(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wM
 			// SAMP Hooking successful, now hook GTA functions
 			SetupGtaHooks();
 		}
-		DebugPrint("SAMP Initialized, plugin version " CHANDLING_VERSION);
+#ifdef DEBUG
+		DebugPrint("Plugin initialized, version " CHANDLING_VERSION);
+#else
+		AddChatMessage("Plugin initialized, version " CHANDLING_VERSION);
+#endif
 		RegisterAllActionCallbacks();
 		
 		UNHOOK();
